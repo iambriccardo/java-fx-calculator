@@ -6,8 +6,9 @@ package com.riccardobusetti.calculator.domain;
  *
  * @author riccardobusetti
  */
-public enum Constraint {
-    SMALL_OR_EQUAL_1(value -> value >= 1, "The value must be >= 1");
+public enum Constraint implements Validatable<Integer> {
+    GREATER_THAN_0(value -> value > 0, "The value must be > 0"),
+    GREATER_THAN_1(value -> value > 1, "The value must be > 1");
 
     private Validatable<Integer> validatable;
     private String violationMessage;
@@ -15,5 +16,14 @@ public enum Constraint {
     Constraint(Validatable<Integer> validatable, String violationMessage) {
         this.validatable = validatable;
         this.violationMessage = violationMessage;
+    }
+
+    public String getViolationMessage() {
+        return violationMessage;
+    }
+
+    @Override
+    public boolean isValid(Integer value) {
+        return validatable.isValid(value);
     }
 }

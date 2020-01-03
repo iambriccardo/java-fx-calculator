@@ -20,4 +20,20 @@ public class Input {
         this.isMandatory = isMandatory;
         this.isClearable = isClearable;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public List<Constraint> getConstraints() {
+        return constraints;
+    }
+
+    public boolean isMandatory() {
+        return isMandatory;
+    }
+
+    public boolean isClearable() {
+        return isClearable;
+    }
 }
