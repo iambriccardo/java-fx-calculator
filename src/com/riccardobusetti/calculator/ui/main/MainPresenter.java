@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class that acts as the presenter for the main view by managing all the business
+ * logic and dispatching UI events.
+ *
+ * @author riccardobusetti
+ */
 public class MainPresenter implements MainContract.BaseMainPresenter {
 
     private MainContract.BaseMainView view;
@@ -45,6 +51,7 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
         List<Integer> outputs = new ArrayList<>();
 
         if (currentComputation != null) {
+            // TODO: call all math functions.
             switch (currentComputation) {
                 case ERATOSTHENES:
                     outputs.add(MathUtil.eratosthenes(inputs.get(0)));

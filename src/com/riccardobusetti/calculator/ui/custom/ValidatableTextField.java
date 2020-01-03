@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Custom textfield that is able to validate a specific input given some constraints.
+ *
+ * @author riccardobusetti
+ */
 public class ValidatableTextField extends TextField {
 
     private List<Constraint> constraints;
@@ -18,11 +23,11 @@ public class ValidatableTextField extends TextField {
     }
 
     public Integer getIntegerValue() {
-        return getInteger();
+        return hasInteger();
     }
 
     public Integer validate() throws InvalidInputException {
-        Integer value = getInteger();
+        Integer value = hasInteger();
 
         if (value == null) {
             throw new InvalidInputException("You must insert an integer number");
@@ -49,7 +54,7 @@ public class ValidatableTextField extends TextField {
         return violationMessages.size() > 0 ? violationMessages.stream().map(String::valueOf).collect(Collectors.joining("-")) : null;
     }
 
-    private Integer getInteger() {
+    private Integer hasInteger() {
         try {
             return Integer.parseInt(getText());
         } catch (NumberFormatException exception) {

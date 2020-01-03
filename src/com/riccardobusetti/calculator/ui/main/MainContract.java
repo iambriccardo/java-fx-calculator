@@ -6,6 +6,13 @@ import com.riccardobusetti.calculator.ui.View;
 
 import java.util.List;
 
+/**
+ * Interface describing the contract between the presenter and the view.
+ * <p>
+ * This contract is crucial because in our application we are using MVP design pattern.
+ *
+ * @author riccardobusetti
+ */
 public interface MainContract {
 
     interface BaseMainView extends View {
@@ -17,6 +24,8 @@ public interface MainContract {
         void showOutputs(List<Integer> outputs);
 
         void clearInputs();
+
+        // TODO: implement graph related methods.
     }
 
     interface BaseMainPresenter extends Presenter {

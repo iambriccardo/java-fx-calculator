@@ -8,6 +8,11 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
+/**
+ * Custom layout which contains a textfield with multiple labels for description, error...
+ *
+ * @author riccardobusetti
+ */
 public class ValidatableLayout extends VBox {
 
     private Label descriptionLabel;
