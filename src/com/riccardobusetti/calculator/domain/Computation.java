@@ -10,38 +10,67 @@ import java.util.List;
  * @author riccardobusetti
  */
 public enum Computation {
-    ERATOSTHENES(1,
-            "Eratosthenes function",
+    ERATOSTHENES(
+            "Eratosthenes algorithm",
             Arrays.asList(
                     new Input("Insert n: ", Arrays.asList(
                             Constraint.GREATER_THAN_1
                     ), true, true)
             ),
             false),
-    GCD(2, "Greatest common divisor",
+    GCD("Greatest common divisor",
             Arrays.asList(
-                    new Input("Insert a: ", Arrays.asList(
+                    new Input("Insert n: ", Arrays.asList(
                             Constraint.GREATER_THAN_0
                     ), true, true),
-                    new Input("Insert b: ", Arrays.asList(
+                    new Input("Insert m: ", Arrays.asList(
                             Constraint.GREATER_THAN_0
                     ), true, true)
-            ), false);
+            ), false),
+    PRIME_NUMBERS(
+            "Prime numbers",
+            Arrays.asList(
+                    new Input("Insert n: ", Arrays.asList(
+                            Constraint.GREATER_THAN_0
+                    ), true, true)
+            ),
+            false),
+    COPRIME_NUMBERS(
+            "Coprime numbers",
+            Arrays.asList(
+                    new Input("Insert n: ", Arrays.asList(
+                            Constraint.GREATER_THAN_1
+                    ), true, true)
+            ),
+            false),
+    PRIME_FACTORIZATION(
+            "Prime factorization",
+            Arrays.asList(
+                    new Input("Insert n: ", Arrays.asList(
+                            Constraint.GREATER_THAN_1
+                    ), true, true)
+            ),
+            false),
+    SIGMA(
+            "Sigma function",
+            Arrays.asList(
+                    new Input("Insert x: ", Arrays.asList(
+                            Constraint.GREATER_OR_EQUAL_THAN_0
+                    ), true, true),
+                    new Input("Insert n: ", Arrays.asList(
+                            Constraint.GREATER_THAN_1
+                    ), true, true)
+            ),
+            false);
 
-    private int id;
     private String label;
     private List<Input> inputs;
     private boolean hasGraph;
 
-    Computation(int id, String label, List<Input> inputs, boolean hasGraph) {
-        this.id = id;
+    Computation(String label, List<Input> inputs, boolean hasGraph) {
         this.label = label;
         this.inputs = inputs;
         this.hasGraph = hasGraph;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getLabel() {

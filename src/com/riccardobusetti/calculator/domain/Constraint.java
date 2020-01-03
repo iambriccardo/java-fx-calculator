@@ -7,6 +7,7 @@ package com.riccardobusetti.calculator.domain;
  * @author riccardobusetti
  */
 public enum Constraint implements Validatable<Integer> {
+    GREATER_OR_EQUAL_THAN_0(value -> value >= 0, "The value must be >= 0"),
     GREATER_THAN_0(value -> value > 0, "The value must be > 0"),
     GREATER_THAN_1(value -> value > 1, "The value must be > 1");
 

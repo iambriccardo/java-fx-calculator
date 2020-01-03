@@ -54,9 +54,22 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
             // TODO: call all math functions.
             switch (currentComputation) {
                 case ERATOSTHENES:
-                    outputs.add(MathUtil.eratosthenes(inputs.get(0)));
+                    outputs.addAll(MathUtil.eratosthenes(inputs.get(0)));
                     break;
                 case GCD:
+                    outputs.add(MathUtil.gcd(inputs.get(0), inputs.get(1)));
+                    break;
+                case PRIME_NUMBERS:
+                    outputs.addAll(MathUtil.primeNumbers(inputs.get(0)));
+                    break;
+                case COPRIME_NUMBERS:
+                    outputs.addAll(MathUtil.coprimeNumbers(inputs.get(0)));
+                    break;
+                case PRIME_FACTORIZATION:
+                    outputs.addAll(MathUtil.primeFactorization(inputs.get(0)));
+                    break;
+                case SIGMA:
+                    outputs.add(MathUtil.sigma(inputs.get(0), inputs.get(1)));
                     break;
             }
         }

@@ -133,6 +133,7 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     @Override
     public void clearInputs() {
+        // TODO: manage output label.
         if (inputsContainer != null) {
             currentInputs.clear();
             root.getChildren().remove(inputsContainer);
