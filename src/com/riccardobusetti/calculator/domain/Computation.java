@@ -35,7 +35,7 @@ public enum Computation {
                             Constraint.GREATER_THAN_0
                     ), true, true)
             ),
-            false),
+            true),
     COPRIME_NUMBERS(
             "Coprime numbers",
             Collections.singletonList(
@@ -43,7 +43,7 @@ public enum Computation {
                             Constraint.GREATER_THAN_1
                     ), true, true)
             ),
-            false),
+            true),
     PRIME_FACTORIZATION(
             "Prime factorization",
             Collections.singletonList(
@@ -81,7 +81,7 @@ public enum Computation {
                             Constraint.GREATER_THAN_1
                     ), true, true)
             ),
-            false);
+            true);
 
     private String label;
     private List<Input> inputs;
