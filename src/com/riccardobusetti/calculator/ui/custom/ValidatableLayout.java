@@ -22,7 +22,7 @@ public class ValidatableLayout extends VBox {
         errorLabel = new Label();
         errorLabel.setTextFill(Color.RED);
 
-        getChildren().addAll(descriptionLabel, validatableTextField, errorLabel);
+        getChildren().addAll(descriptionLabel, validatableTextField);
     }
 
     public Integer getValue() {
@@ -41,11 +41,11 @@ public class ValidatableLayout extends VBox {
     }
 
     private void showError(String text) {
+        getChildren().add(errorLabel);
         errorLabel.setText(text);
-        errorLabel.setVisible(true);
     }
 
     private void hideError() {
-        errorLabel.setVisible(false);
+        getChildren().remove(errorLabel);
     }
 }

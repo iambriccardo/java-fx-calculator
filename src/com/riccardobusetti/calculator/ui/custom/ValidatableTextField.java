@@ -4,7 +4,9 @@ import com.riccardobusetti.calculator.domain.Constraint;
 import com.riccardobusetti.calculator.exception.InvalidInputException;
 import javafx.scene.control.TextField;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ValidatableTextField extends TextField {
 
@@ -22,8 +24,6 @@ public class ValidatableTextField extends TextField {
     public Integer validate() throws InvalidInputException {
         Integer value = getInteger();
 
-        System.out.println("Input value is " + value);
-
         if (value == null) {
             throw new InvalidInputException("You must insert an integer number");
         } else {
@@ -38,15 +38,15 @@ public class ValidatableTextField extends TextField {
     }
 
     private String checkConstraints(Integer value) {
-        StringBuilder violationMessage = new StringBuilder();
+        List<String> violationMessages = new ArrayList<>();
 
         for (Constraint constraint: constraints) {
             if (!constraint.isValid(value)) {
-                violationMessage.append(constraint.getViolationMessage()).append(" ");
+                violationMessages.add(constraint.getViolationMessage());
             }
         }
 
-        return violationMessage.toString().isEmpty() ? null : violationMessage.toString();
+        return violationMessages.size() > 0 ? violationMessages.stream().map(String::valueOf).collect(Collectors.joining("-")) : null;
     }
 
     private Integer getInteger() {
