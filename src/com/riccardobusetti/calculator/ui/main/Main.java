@@ -1,28 +1,27 @@
 package com.riccardobusetti.calculator.ui.main;
 
 import com.riccardobusetti.calculator.domain.Computation;
-import com.riccardobusetti.calculator.ui.custom.ValidatableTextField;
+import com.riccardobusetti.calculator.ui.custom.ValidatableLayout;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application implements MainContract.BaseMainView {
 
     private MainPresenter presenter;
+    private List<ValidatableLayout> currentInputs = new ArrayList<>();
 
     private FlowPane root;
     private VBox inputsContainer;
@@ -76,14 +75,37 @@ public class Main extends Application implements MainContract.BaseMainView {
         inputsContainer.setSpacing(16);
 
         computation.getInputs().forEach(input -> {
-            ValidatableTextField textField = new ValidatableTextField(input.getLabel(), input.getConstraints(), true, true);
-            inputsContainer.getChildren().add(textField);
+            ValidatableLayout layout = new ValidatableLayout(
+                    4,
+                    input.getLabel(),
+                    input.getConstraints(),
+                    input.isMandatory(),
+                    input.isClearable()
+            );
+
+            currentInputs.add(layout);
+            inputsContainer.getChildren().add(layout);
         });
 
         Button computeButton = new Button("Compute");
+        computeButton.setOnAction(this::handleComputeButtonClick);
         inputsContainer.getChildren().add(computeButton);
 
         root.getChildren().add(inputsContainer);
+    }
+
+    private void handleComputeButtonClick(Event event) {
+        List<Integer> inputs = new ArrayList<>();
+
+        for (ValidatableLayout layout: currentInputs) {
+            if (layout.validate()) {
+                inputs.add(layout.getValue());
+            }
+        }
+
+        if (inputs.size() == currentInputs.size()) {
+            presenter.performComputation(inputs);
+        }
     }
 
     @Override
@@ -94,6 +116,7 @@ public class Main extends Application implements MainContract.BaseMainView {
     @Override
     public void clearInputs() {
         if (inputsContainer != null) {
+            currentInputs.clear();
             root.getChildren().remove(inputsContainer);
         }
     }

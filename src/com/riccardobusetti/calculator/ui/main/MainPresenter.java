@@ -39,11 +39,7 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
     }
 
     @Override
-    public List<Integer> performComputation(Computation computation) {
-        switch (computation) {
-
-        }
-
-        return Arrays.asList(1, 2);
+    public void performComputation(List<Integer> inputs) {
+        view.showOutputs(Arrays.asList(1, 2, 3));
     }
 }

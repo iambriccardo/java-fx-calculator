@@ -27,6 +27,6 @@ public interface MainContract {
 
         Computation getCurrentComputation();
 
-        List<Integer> performComputation(Computation computation);
+        void performComputation(List<Integer> inputs);
     }
 }
