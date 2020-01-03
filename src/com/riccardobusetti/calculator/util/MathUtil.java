@@ -95,4 +95,21 @@ public class MathUtil {
 
         return result;
     }
+
+    public static List<Integer> linearCongruentialGenerator(int a, int b, int m, int n) {
+        List<Integer> outputs = new ArrayList<>();
+        int x = 1;
+
+        for (int i = 1; i <= n; i++) {
+            x = ((a * x) + b) % m;
+            outputs.add(x);
+        }
+
+        return outputs;
+    }
+
+    // TODO: fix this.
+    public static int partition(int n) {
+        return (int) ((1 / (4 * n * Math.sqrt(3))) * Math.pow(Math.E, (Math.PI * Math.sqrt((2 * n) / 3.0))));
+    }
 }

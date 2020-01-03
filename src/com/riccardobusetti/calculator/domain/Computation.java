@@ -1,6 +1,7 @@
 package com.riccardobusetti.calculator.domain;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,41 +13,41 @@ import java.util.List;
 public enum Computation {
     ERATOSTHENES(
             "Eratosthenes algorithm",
-            Arrays.asList(
-                    new Input("Insert n: ", Arrays.asList(
+            Collections.singletonList(
+                    new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_1
                     ), true, true)
             ),
             false),
     GCD("Greatest common divisor",
             Arrays.asList(
-                    new Input("Insert n: ", Arrays.asList(
+                    new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
                     ), true, true),
-                    new Input("Insert m: ", Arrays.asList(
+                    new Input("Insert m: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
                     ), true, true)
             ), false),
     PRIME_NUMBERS(
             "Prime numbers",
-            Arrays.asList(
-                    new Input("Insert n: ", Arrays.asList(
+            Collections.singletonList(
+                    new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
                     ), true, true)
             ),
             false),
     COPRIME_NUMBERS(
             "Coprime numbers",
-            Arrays.asList(
-                    new Input("Insert n: ", Arrays.asList(
+            Collections.singletonList(
+                    new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_1
                     ), true, true)
             ),
             false),
     PRIME_FACTORIZATION(
             "Prime factorization",
-            Arrays.asList(
-                    new Input("Insert n: ", Arrays.asList(
+            Collections.singletonList(
+                    new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_1
                     ), true, true)
             ),
@@ -54,10 +55,29 @@ public enum Computation {
     SIGMA(
             "Sigma function",
             Arrays.asList(
-                    new Input("Insert x: ", Arrays.asList(
+                    new Input("Insert x: ", Collections.singletonList(
                             Constraint.GREATER_OR_EQUAL_THAN_0
                     ), true, true),
-                    new Input("Insert n: ", Arrays.asList(
+                    new Input("Insert n: ", Collections.singletonList(
+                            Constraint.GREATER_THAN_1
+                    ), true, true)
+            ),
+            false),
+    LINEAR_CONGRUENTIAL_GENERATOR(
+            "Linear congruential generator",
+            Arrays.asList(
+                    new Input("Insert a: ", Collections.emptyList(), true, true),
+                    new Input("Insert b: ", Collections.emptyList(), true, true),
+                    new Input("Insert m: ", Collections.emptyList(), true, true),
+                    new Input("Insert n: ", Collections.singletonList(
+                            Constraint.GREATER_THAN_0
+                    ), true, true)
+            ),
+            false),
+    PARTITION(
+            "Partition function",
+            Collections.singletonList(
+                    new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_1
                     ), true, true)
             ),
@@ -81,7 +101,7 @@ public enum Computation {
         return inputs;
     }
 
-    public boolean isHasGraph() {
+    public boolean hasGraph() {
         return hasGraph;
     }
 }
