@@ -1,7 +1,7 @@
 package com.riccardobusetti.calculator.ui.main;
 
 import com.riccardobusetti.calculator.domain.Computation;
-import com.riccardobusetti.calculator.ui.logging.Logger;
+import com.riccardobusetti.calculator.logging.Logger;
 import com.riccardobusetti.calculator.util.MathUtil;
 
 import java.util.ArrayList;

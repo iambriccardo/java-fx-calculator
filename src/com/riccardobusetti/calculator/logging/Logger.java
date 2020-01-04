@@ -1,4 +1,4 @@
-package com.riccardobusetti.calculator.ui.logging;
+package com.riccardobusetti.calculator.logging;
 
 import com.riccardobusetti.calculator.domain.Computation;
 

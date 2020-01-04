@@ -1,6 +1,6 @@
 package com.riccardobusetti.calculator.ui.custom;
 
-import com.riccardobusetti.calculator.ui.logging.Logger;
+import com.riccardobusetti.calculator.logging.Logger;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.ListView;
 
