@@ -35,7 +35,7 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     private MainPresenter presenter;
     private List<ValidatableLayout> currentInputs = new ArrayList<>();
-    private int batchRange = BASE_BATCH_RANGE;
+    private int batchRange;
 
     private Stage stage;
     private BorderPane root;
@@ -58,7 +58,7 @@ public class Main extends Application implements MainContract.BaseMainView {
 
         stage = primaryStage;
         stage.setTitle("Java FX function calculator");
-        stage.setScene(new Scene(root, 700, 525));
+        stage.setScene(new Scene(root, 700, 575));
         stage.setResizable(false);
         stage.show();
     }
@@ -76,6 +76,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         if (root != null) {
             computationSelection = new ComboBox<>(FXCollections.observableList(computations));
             computationSelection.valueProperty().addListener((obs, oldComputation, newComputation) -> {
+                batchRange = BASE_BATCH_RANGE;
                 presenter.setCurrentComputation(newComputation);
             });
             computationSelection.setConverter(new StringConverter<>() {
@@ -117,12 +118,15 @@ public class Main extends Application implements MainContract.BaseMainView {
             currentInputs.add(layout);
             inputsContainer.getChildren().add(layout);
         });
-
         computeButton = new Button("Compute");
         computeButton.setMinWidth(268);
         computeButton.setMaxWidth(268);
         computeButton.setOnAction(this::handleComputeButtonClick);
-        inputsContainer.getChildren().add(computeButton);
+        Label computationDescriptionLabel = new Label(computation.getDescription());
+        computationDescriptionLabel.setWrapText(true);
+        computationDescriptionLabel.setStyle("-fx-font: 12 arial");
+        computationDescriptionLabel.setTextFill(Color.GREY);
+        inputsContainer.getChildren().addAll(computeButton, computationDescriptionLabel);
 
         outputsContainer = new VBox();
         outputsContainer.setPadding(new Insets(16, 16, 16, 16));
@@ -172,14 +176,14 @@ public class Main extends Application implements MainContract.BaseMainView {
         graphContainer = new VBox();
         graphContainer.setSpacing(4);
 
-        Label graphDescriptionLabel = new Label("Function graph from 1 to " + outputs.size() + ":");
+        Label graphDescriptionLabel = new Label("Function graph: ");
 
         graph = new LineChart<>(xAxis, yAxis);
         graph.setMaxHeight(200);
         graph.setMaxWidth(300);
-        graph.setTitle(presenter.getCurrentComputation().getLabel());
+        graph.setTitle(presenter.getCurrentComputation().getLabel() + " for 1 to " + outputs.size() + ":");
         XYChart.Series series = new XYChart.Series();
-        series.setName("Computation of the function from 1 to " + outputs.size());
+        series.setName("Computation of the function for 1 to " + outputs.size());
         for (int i = 0; i < inputs.size(); i++) {
             series.getData().add(new XYChart.Data<>(inputs.get(i), outputs.get(i)));
         }
