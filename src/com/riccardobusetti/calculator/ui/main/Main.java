@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -35,10 +36,11 @@ public class Main extends Application implements MainContract.BaseMainView {
     private VBox inputsContainer;
     private VBox outputsContainer;
     private ComboBox<Computation> computationSelection;
-    private Button logButton;
+    private Button clearAllButton;
     private Button computeButton;
+    private Button logButton;
     private Button graphButton;
-    private Label outputsLabel;
+    private Label outputsResultLabel;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,16 +50,13 @@ public class Main extends Application implements MainContract.BaseMainView {
 
         stage = primaryStage;
         stage.setTitle("Java FX function calculator");
-        stage.setScene(new Scene(root, 500, 500));
+        stage.setScene(new Scene(root, 700, 450));
+        stage.setResizable(false);
         stage.show();
     }
 
     private void setUpUi() {
         root = new BorderPane();
-
-        outputsLabel = new Label();
-        outputsLabel.setTextFill(Color.BLACK);
-        outputsLabel.setStyle("-fx-font: 16 arial;");
     }
 
     private void initPresenter() {
@@ -107,10 +106,10 @@ public class Main extends Application implements MainContract.BaseMainView {
         bottomBar.setPadding(new Insets(16, 16, 16, 16));
         bottomBar.setSpacing(8);
         bottomBar.setStyle("-fx-background-color: darkgrey");
-        bottomBar.setAlignment(Pos.CENTER_RIGHT);
+        bottomBar.setAlignment(Pos.CENTER_LEFT);
 
-        computeButton = new Button("Compute");
-        computeButton.setOnAction(this::handleComputeButtonClick);
+        clearAllButton = new Button("Clear all");
+        clearAllButton.setOnAction(this::handleClearAllButton);
 
         logButton = new Button("See log");
         logButton.setOnAction(this::handleLogButtonClick);
@@ -120,7 +119,7 @@ public class Main extends Application implements MainContract.BaseMainView {
             graphButton.setOnAction(this::handleGraphButtonClick);
         }
 
-        bottomBar.getChildren().addAll(computeButton, logButton);
+        bottomBar.getChildren().addAll(clearAllButton, logButton);
         if (showGraph) bottomBar.getChildren().add(graphButton);
 
         return bottomBar;
@@ -155,6 +154,8 @@ public class Main extends Application implements MainContract.BaseMainView {
         computationContainer.setHgap(16);
 
         inputsContainer = new VBox();
+        inputsContainer.setMinWidth(300);
+        inputsContainer.setMaxWidth(300);
         inputsContainer.setPadding(new Insets(16, 16, 16, 16));
         inputsContainer.setSpacing(16);
         computation.getInputs().forEach(input -> {
@@ -170,20 +171,42 @@ public class Main extends Application implements MainContract.BaseMainView {
             inputsContainer.getChildren().add(layout);
         });
 
+        computeButton = new Button("Compute");
+        computeButton.setMinWidth(268);
+        computeButton.setMaxWidth(268);
+        computeButton.setOnAction(this::handleComputeButtonClick);
+        inputsContainer.getChildren().add(computeButton);
+
         outputsContainer = new VBox();
         outputsContainer.setPadding(new Insets(16, 16, 16, 16));
         outputsContainer.setSpacing(16);
-        outputsContainer.getChildren().add(outputsLabel);
 
-        computationContainer.getChildren().addAll(inputsContainer, outputsContainer);
+        Label outputDescriptionLabel = new Label("Function result: ");
+        outputsResultLabel = new Label();
+        outputsResultLabel.setTextFill(Color.BLACK);
+        outputsResultLabel.setStyle("-fx-font: 18 arial;");
+        outputsResultLabel.setWrapText(true);
+        VBox outputsLabelsContainer = new VBox(outputDescriptionLabel, outputsResultLabel);
+        outputsLabelsContainer.setSpacing(4);
+        outputsContainer.getChildren().add(outputsLabelsContainer);
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setStyle("-fx-background-color: transparent");
+        scrollPane.setPrefSize(300, 0);
+        scrollPane.setContent(outputsContainer);
+
+        computationContainer.getChildren().addAll(inputsContainer, scrollPane);
 
         root.setCenter(computationContainer);
         root.setBottom(getBottomBar(computation.hasGraph()));
     }
 
+    private void handleClearAllButton(Event event) {
+        currentInputs.forEach(ValidatableLayout::clear);
+    }
+
     @Override
     public void showOutputs(List<Integer> outputs) {
-        outputsLabel.setText(outputs.stream()
+        outputsResultLabel.setText(outputs.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(", ")));
     }

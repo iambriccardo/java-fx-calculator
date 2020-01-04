@@ -45,6 +45,11 @@ public class ValidatableLayout extends VBox {
         }
     }
 
+    public void clear() {
+        hideError();
+        validatableTextField.setText("");
+    }
+
     private void showError(String text) {
         getChildren().add(errorLabel);
         errorLabel.setText(text);

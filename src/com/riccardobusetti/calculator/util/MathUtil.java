@@ -46,15 +46,14 @@ public class MathUtil {
         return n;
     }
 
-    public static List<Integer> primeNumbers(int n) {
-        List<Integer> outputs = new ArrayList<>();
-        outputs.add(1);
+    public static int primeNumbers(int n) {
+        int numberOfPrimeNumbers = 1;
 
         if (n > 1) {
-            outputs.addAll(eratosthenes(n));
+            numberOfPrimeNumbers += eratosthenes(n).size();
         }
 
-        return outputs;
+        return numberOfPrimeNumbers;
     }
 
     public static List<Integer> coprimeNumbers(int n) {

@@ -60,7 +60,7 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
                     outputs.add(MathUtil.gcd(inputs.get(0), inputs.get(1)));
                     break;
                 case PRIME_NUMBERS:
-                    outputs.addAll(MathUtil.primeNumbers(inputs.get(0)));
+                    outputs.add(MathUtil.primeNumbers(inputs.get(0)));
                     break;
                 case COPRIME_NUMBERS:
                     outputs.addAll(MathUtil.coprimeNumbers(inputs.get(0)));

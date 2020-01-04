@@ -68,7 +68,9 @@ public enum Computation {
             Arrays.asList(
                     new Input("Insert a: ", Collections.emptyList(), true, true),
                     new Input("Insert b: ", Collections.emptyList(), true, true),
-                    new Input("Insert m: ", Collections.emptyList(), true, true),
+                    new Input("Insert m: ", Collections.singletonList(
+                            Constraint.GREATER_THAN_0
+                    ), true, true),
                     new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
                     ), true, true)
