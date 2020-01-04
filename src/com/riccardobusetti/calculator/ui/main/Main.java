@@ -1,6 +1,7 @@
 package com.riccardobusetti.calculator.ui.main;
 
 import com.riccardobusetti.calculator.domain.Computation;
+import com.riccardobusetti.calculator.ui.custom.LogDialog;
 import com.riccardobusetti.calculator.ui.custom.ValidatableLayout;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -12,16 +13,15 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.StringConverter;
 
 import java.util.ArrayList;
@@ -239,7 +239,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         clearAllButton = new Button("Clear all");
         clearAllButton.setOnAction(this::handleClearAllButton);
 
-        logButton = new Button("See log");
+        logButton = new Button("See computations log");
         logButton.setOnAction(this::handleLogButtonClick);
 
         bottomBar.getChildren().addAll(clearAllButton, logButton);
@@ -271,7 +271,15 @@ public class Main extends Application implements MainContract.BaseMainView {
     }
 
     private void handleLogButtonClick(Event event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Computations log");
+        alert.setResizable(true);
+        alert.setDialogPane(new LogDialog());
+        alert.initModality(Modality.WINDOW_MODAL);
+        alert.show();
 
+        Window window = alert.getDialogPane().getScene().getWindow();
+        window.setOnCloseRequest(windowsEvent -> window.hide());
     }
 
     private void handleGraphIntervalButtonClick(boolean isIncreasing) {
