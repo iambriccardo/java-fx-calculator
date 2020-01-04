@@ -23,6 +23,8 @@ public interface MainContract {
 
         void showOutputs(List<Integer> outputs);
 
+        void showGraph(List<Integer> inputs, List<Integer> outputs);
+
         void clearInputs();
 
         // TODO: implement graph related methods.
@@ -37,5 +39,7 @@ public interface MainContract {
         Computation getCurrentComputation();
 
         void performComputation(List<Integer> inputs);
+
+        void performBatchComputation(int n);
     }
 }

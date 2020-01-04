@@ -11,8 +11,6 @@ import java.util.List;
  */
 public class MathUtil {
 
-    // TODO: implement all mathematical functions.
-
     public static List<Integer> eratosthenes(int n) {
         boolean[] a = new boolean[n + 1];
         Arrays.fill(a, true);
@@ -56,14 +54,14 @@ public class MathUtil {
         return numberOfPrimeNumbers;
     }
 
-    public static List<Integer> coprimeNumbers(int n) {
-        List<Integer> outputs = new ArrayList<>();
+    public static int coprimeNumbers(int n) {
+        int numberOfCoprimeNumbers = 0;
 
         for (int i = 1; i <= n; i++) {
-            if (gcd(i, n) == 1) outputs.add(i);
+            if (gcd(i, n) == 1) numberOfCoprimeNumbers++;
         }
 
-        return outputs;
+        return numberOfCoprimeNumbers;
     }
 
     public static List<Integer> primeFactorization(int n) {

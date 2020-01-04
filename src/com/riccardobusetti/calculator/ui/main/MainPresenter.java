@@ -5,6 +5,7 @@ import com.riccardobusetti.calculator.util.MathUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,10 +49,26 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
 
     @Override
     public void performComputation(List<Integer> inputs) {
+        view.showOutputs(getOutputs(inputs));
+    }
+
+    @Override
+    public void performBatchComputation(int n) {
+        List<Integer> inputs = new ArrayList<>();
+        List<Integer> outputs = new ArrayList<>();
+
+        for (int i = 1; i <= n; i++) {
+            inputs.add(i);
+            outputs.add(getOutputs(Collections.singletonList(i)).get(0));
+        }
+
+        view.showGraph(inputs, outputs);
+    }
+
+    private List<Integer> getOutputs(List<Integer> inputs) {
         List<Integer> outputs = new ArrayList<>();
 
         if (currentComputation != null) {
-            // TODO: call all math functions.
             switch (currentComputation) {
                 case ERATOSTHENES:
                     outputs.addAll(MathUtil.eratosthenes(inputs.get(0)));
@@ -63,7 +80,7 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
                     outputs.add(MathUtil.primeNumbers(inputs.get(0)));
                     break;
                 case COPRIME_NUMBERS:
-                    outputs.addAll(MathUtil.coprimeNumbers(inputs.get(0)));
+                    outputs.add(MathUtil.coprimeNumbers(inputs.get(0)));
                     break;
                 case PRIME_FACTORIZATION:
                     outputs.addAll(MathUtil.primeFactorization(inputs.get(0)));
@@ -80,6 +97,6 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
             }
         }
 
-        view.showOutputs(outputs);
+        return outputs;
     }
 }
