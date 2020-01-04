@@ -89,7 +89,12 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
                     outputs.add(MathUtil.sigma(inputs.get(0), inputs.get(1)));
                     break;
                 case LINEAR_CONGRUENTIAL_GENERATOR:
-                    outputs.addAll(MathUtil.linearCongruentialGenerator(inputs.get(0), inputs.get(1), inputs.get(2), inputs.get(3)));
+                    outputs.addAll(MathUtil.linearCongruentialGenerator(
+                            inputs.get(0),
+                            inputs.get(1),
+                            inputs.get(2),
+                            inputs.get(3))
+                    );
                     break;
                 case PARTITION:
                     outputs.add(MathUtil.partition(inputs.get(0)));

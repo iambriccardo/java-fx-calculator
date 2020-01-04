@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Interface describing the contract between the presenter and the view.
  * <p>
- * This contract is crucial because in our application we are using MVP design pattern.
+ * This contract is needed because of the MVP architectural pattern adopted in this application.
  *
  * @author riccardobusetti
  */
@@ -26,8 +26,6 @@ public interface MainContract {
         void showGraph(List<Integer> inputs, List<Integer> outputs);
 
         void clearInputs();
-
-        // TODO: implement graph related methods.
     }
 
     interface BaseMainPresenter extends Presenter {

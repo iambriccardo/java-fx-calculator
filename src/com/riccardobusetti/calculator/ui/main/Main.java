@@ -278,9 +278,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         if (isIncreasing) {
             batchRange++;
         } else {
-            if (batchRange > 1) {
-                batchRange--;
-            }
+            if (batchRange > 1) batchRange--;
         }
 
         performBatchComputation();

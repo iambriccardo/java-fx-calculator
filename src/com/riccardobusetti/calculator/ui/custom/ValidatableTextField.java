@@ -45,13 +45,15 @@ public class ValidatableTextField extends TextField {
     private String checkConstraints(Integer value) {
         List<String> violationMessages = new ArrayList<>();
 
-        for (Constraint constraint: constraints) {
+        for (Constraint constraint : constraints) {
             if (!constraint.isValid(value)) {
                 violationMessages.add(constraint.getViolationMessage());
             }
         }
 
-        return violationMessages.size() > 0 ? violationMessages.stream().map(String::valueOf).collect(Collectors.joining("-")) : null;
+        return violationMessages.size() > 0 ?
+                violationMessages.stream().map(String::valueOf).collect(Collectors.joining("-")) :
+                null;
     }
 
     private Integer hasInteger() {
