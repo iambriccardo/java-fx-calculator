@@ -58,7 +58,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         initPresenter();
 
         stage = primaryStage;
-        stage.setTitle("Java FX function calculator");
+        stage.setTitle("Java FX function calculator by Riccardo Busetti n.17692");
         stage.setScene(new Scene(root, WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT));
         stage.setResizable(false);
         stage.show();
@@ -75,6 +75,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         upwardArrow.setPreserveRatio(true);
         upwardArrow.setSmooth(true);
         upwardArrow.setCache(true);
+        upwardArrow.setOnMouseEntered(event -> computationSelection.show());
 
         root.setCenter(upwardArrow);
     }
@@ -235,17 +236,17 @@ public class Main extends Application implements MainContract.BaseMainView {
         }
     }
 
-    private HBox getToolbar() {
-        HBox toolbar = new HBox();
+    private GridPane getToolbar() {
+        GridPane toolbar = new GridPane();
+        toolbar.getColumnConstraints().add(new ColumnConstraints(WINDOW_DEFAULT_WIDTH / 3));
         toolbar.setPadding(new Insets(16, 16, 16, 16));
-        toolbar.setSpacing(8);
         toolbar.setStyle("-fx-background-color: #ff7043");
-        toolbar.setAlignment(Pos.CENTER_LEFT);
 
         Label title = new Label("Function Calculator");
         title.setStyle("-fx-font: 16 arial;");
 
-        toolbar.getChildren().addAll(title, computationSelection);
+        toolbar.add(title, 0, 0);
+        toolbar.add(computationSelection, 1, 0);
 
         return toolbar;
     }
@@ -255,7 +256,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         bottomBar.setPadding(new Insets(16, 16, 16, 16));
         bottomBar.setSpacing(8);
         bottomBar.setStyle("-fx-background-color: #ff7043");
-        bottomBar.setAlignment(Pos.CENTER_RIGHT);
+        bottomBar.setAlignment(Pos.CENTER_LEFT);
 
         clearAllButton = new Button("Clear all");
         clearAllButton.setOnAction(this::handleClearAllButton);
