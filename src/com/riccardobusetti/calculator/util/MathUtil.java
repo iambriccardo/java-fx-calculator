@@ -105,7 +105,6 @@ public class MathUtil {
         return outputs;
     }
 
-    // TODO: fix this.
     public static int partition(int n) {
         return (int) ((1 / (4 * n * Math.sqrt(3))) * Math.pow(Math.E, (Math.PI * Math.sqrt((2 * n) / 3.0))));
     }
