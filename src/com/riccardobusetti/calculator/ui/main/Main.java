@@ -149,7 +149,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setStyle("-fx-background-color: transparent");
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
         scrollPane.setPrefSize(300, 50);
         scrollPane.setContent(outputsResultLabel);
         VBox outputsLabelsContainer = new VBox(outputDescriptionLabel, scrollPane);
