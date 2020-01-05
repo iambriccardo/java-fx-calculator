@@ -88,7 +88,7 @@ public enum Computation {
             "This algorithm will compute the partition function for n > 1.",
             Collections.singletonList(
                     new Input("Insert n: ", Collections.singletonList(
-                            Constraint.GREATER_THAN_1
+                            Constraint.GREATER_THAN_0
                     ), true, true)
             ),
             true);

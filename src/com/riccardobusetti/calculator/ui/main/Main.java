@@ -69,6 +69,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         root.setStyle("-fx-background-color: white");
 
         ImageView upwardArrow = new ImageView();
+        // This animation has been taken from https://lottiefiles.com/4033-uploading credits to Akash Nidhi.
         upwardArrow.setImage(new Image("res/arrow.gif"));
         upwardArrow.setFitWidth(200);
         upwardArrow.setFitHeight(200);
@@ -88,6 +89,7 @@ public class Main extends Application implements MainContract.BaseMainView {
     public void showComputationSelection(List<Computation> computations) {
         if (root != null) {
             computationSelection = new ComboBox<>(FXCollections.observableList(computations));
+            computationSelection.setOnMouseEntered(event -> computationSelection.show());
             computationSelection.valueProperty().addListener((obs, oldComputation, newComputation) -> {
                 batchRange = BASE_BATCH_RANGE;
                 presenter.setCurrentComputation(newComputation);
@@ -261,7 +263,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         clearAllButton = new Button("Clear all");
         clearAllButton.setOnAction(this::handleClearAllButton);
 
-        logButton = new Button("See computations log");
+        logButton = new Button("See history");
         logButton.setOnAction(this::handleLogButtonClick);
 
         bottomBar.getChildren().addAll(clearAllButton, logButton);
@@ -294,7 +296,7 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     private void handleLogButtonClick(Event event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Computations log");
+        alert.setTitle("History of computations");
         alert.setResizable(true);
         alert.setDialogPane(new LogDialog());
         alert.initModality(Modality.WINDOW_MODAL);

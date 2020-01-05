@@ -2,7 +2,12 @@ package com.riccardobusetti.calculator.ui.custom;
 
 import com.riccardobusetti.calculator.domain.Constraint;
 import com.riccardobusetti.calculator.exception.InvalidInputException;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -23,11 +28,25 @@ public class ValidatableLayout extends VBox {
         super(spacing);
 
         descriptionLabel = new Label(placeHolder);
+
+        ImageView clearButton = new ImageView();
+        // This icon has been taken from https://material.io/resources/icons/?search=clear&icon=clear&style=round credits to Google.
+        clearButton.setImage(new Image("res/clear.png"));
+        clearButton.setFitHeight(18);
+        clearButton.setPreserveRatio(true);
+        clearButton.setFitWidth(18);
+        clearButton.setOnMouseClicked(event -> clear());
+        clearButton.setVisible(false);
         validatableTextField = new ValidatableTextField(constraints, isMandatory, isClearable);
+        validatableTextField.textProperty().addListener((observable, oldValue, newValue) -> clearButton.setVisible(!newValue.isEmpty()));
+        StackPane textFieldContainer = new StackPane(validatableTextField, clearButton);
+        StackPane.setAlignment(clearButton, Pos.CENTER_RIGHT);
+        StackPane.setMargin(clearButton, new Insets(0, 4, 0, 4));
+
         errorLabel = new Label();
         errorLabel.setTextFill(Color.RED);
 
-        getChildren().addAll(descriptionLabel, validatableTextField);
+        getChildren().addAll(descriptionLabel, textFieldContainer);
     }
 
     public Integer getValue() {
@@ -47,7 +66,7 @@ public class ValidatableLayout extends VBox {
 
     public void clear() {
         hideError();
-        validatableTextField.setText("");
+        validatableTextField.clear();
     }
 
     private void showError(String text) {
