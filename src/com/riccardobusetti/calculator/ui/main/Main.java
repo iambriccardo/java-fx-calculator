@@ -7,17 +7,15 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,9 +37,10 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     private Stage stage;
     private BorderPane root;
-    private FlowPane computationContainer;
+    private GridPane gridContainer;
     private VBox inputsContainer;
     private VBox outputsContainer;
+    private VBox graphControlsMainContainer;
     private VBox graphContainer;
     private ComboBox<Computation> computationSelection;
     private Button clearAllButton;
@@ -58,13 +57,24 @@ public class Main extends Application implements MainContract.BaseMainView {
 
         stage = primaryStage;
         stage.setTitle("Java FX function calculator");
-        stage.setScene(new Scene(root, 700, 575));
+        stage.setScene(new Scene(root, 648, 575));
         stage.setResizable(false);
         stage.show();
     }
 
     private void setUpUi() {
         root = new BorderPane();
+        root.setStyle("-fx-background-color: white");
+
+        ImageView upwardArrow = new ImageView();
+        upwardArrow.setImage(new Image("res/arrow.gif"));
+        upwardArrow.setFitWidth(200);
+        upwardArrow.setFitHeight(200);
+        upwardArrow.setPreserveRatio(true);
+        upwardArrow.setSmooth(true);
+        upwardArrow.setCache(true);
+
+        root.setCenter(upwardArrow);
     }
 
     private void initPresenter() {
@@ -97,14 +107,14 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     @Override
     public void showInputs(Computation computation) {
-        computationContainer = new FlowPane();
-        computationContainer.setOrientation(Orientation.HORIZONTAL);
-        computationContainer.setHgap(16);
+        gridContainer = new GridPane();
+        gridContainer.setPadding(new Insets(16, 16, 16, 16));
+        gridContainer.setVgap(16);
+        gridContainer.setHgap(16);
 
         inputsContainer = new VBox();
         inputsContainer.setMinWidth(300);
         inputsContainer.setMaxWidth(300);
-        inputsContainer.setPadding(new Insets(16, 16, 16, 16));
         inputsContainer.setSpacing(16);
         computation.getInputs().forEach(input -> {
             ValidatableLayout layout = new ValidatableLayout(
@@ -119,8 +129,8 @@ public class Main extends Application implements MainContract.BaseMainView {
             inputsContainer.getChildren().add(layout);
         });
         computeButton = new Button("Compute");
-        computeButton.setMinWidth(268);
-        computeButton.setMaxWidth(268);
+        computeButton.setMinWidth(300);
+        computeButton.setMaxWidth(300);
         computeButton.setOnAction(this::handleComputeButtonClick);
         Label computationDescriptionLabel = new Label(computation.getDescription());
         computationDescriptionLabel.setWrapText(true);
@@ -129,7 +139,6 @@ public class Main extends Application implements MainContract.BaseMainView {
         inputsContainer.getChildren().addAll(computeButton, computationDescriptionLabel);
 
         outputsContainer = new VBox();
-        outputsContainer.setPadding(new Insets(16, 16, 16, 16));
         outputsContainer.setSpacing(16);
 
         Label outputDescriptionLabel = new Label("Function result:");
@@ -147,12 +156,17 @@ public class Main extends Application implements MainContract.BaseMainView {
         outputsLabelsContainer.setSpacing(4);
         outputsContainer.getChildren().add(outputsLabelsContainer);
 
-        computationContainer.getChildren().addAll(inputsContainer, outputsContainer);
+        gridContainer.getColumnConstraints().add(new ColumnConstraints(300));
+        GridPane.setVgrow(inputsContainer, Priority.ALWAYS);
+        GridPane.setVgrow(outputsContainer, Priority.ALWAYS);
+
+        gridContainer.add(inputsContainer, 0, 0);
+        gridContainer.add(outputsContainer, 1, 0);
 
         if (computation.hasGraph())
             performBatchComputation();
 
-        root.setCenter(computationContainer);
+        root.setCenter(gridContainer);
         root.setBottom(getBottomBar());
     }
 
@@ -165,7 +179,7 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     @Override
     public void showGraph(List<Integer> inputs, List<Integer> outputs) {
-        outputsContainer.getChildren().remove(graphContainer);
+        gridContainer.getChildren().removeAll(graphControlsMainContainer, graphContainer);
 
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Input");
@@ -189,28 +203,33 @@ public class Main extends Application implements MainContract.BaseMainView {
         }
         graph.getData().add(series);
 
-        Label controlsDescription = new Label("Change the graph interval");
+        graphContainer.getChildren().addAll(graphDescriptionLabel, graph);
+
+        Label controlsDescription = new Label("Decrease or increase the graph interval:");
 
         Button decraeseButton = new Button("-");
+        decraeseButton.setMinWidth(148);
         decraeseButton.setOnAction(event -> handleGraphIntervalButtonClick(false));
-
         Button increaseButton = new Button("+");
+        increaseButton.setMinWidth(148);
         increaseButton.setOnAction(event -> handleGraphIntervalButtonClick(true));
 
-        HBox graphControlsContainer = new HBox(controlsDescription, decraeseButton, increaseButton);
-        graphControlsContainer.setAlignment(Pos.CENTER_LEFT);
+        HBox graphControlsContainer = new HBox(decraeseButton, increaseButton);
         graphControlsContainer.setSpacing(4);
 
-        graphContainer.getChildren().addAll(graphDescriptionLabel, graph, graphControlsContainer);
+        graphControlsMainContainer = new VBox();
+        graphControlsMainContainer.setSpacing(4);
+        graphControlsMainContainer.getChildren().addAll(controlsDescription, graphControlsContainer);
 
-        outputsContainer.getChildren().add(graphContainer);
+        gridContainer.add(graphControlsMainContainer, 0, 1);
+        gridContainer.add(graphContainer, 1, 1);
     }
 
     @Override
     public void clearInputs() {
         if (inputsContainer != null) {
             currentInputs.clear();
-            root.getChildren().remove(computationContainer);
+            root.getChildren().remove(gridContainer);
         }
     }
 
@@ -221,7 +240,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         toolbar.setStyle("-fx-background-color: #ff7043");
         toolbar.setAlignment(Pos.CENTER_LEFT);
 
-        Label title = new Label("Java FX Function Calculator");
+        Label title = new Label("Function Calculator");
         title.setStyle("-fx-font: 16 arial;");
 
         toolbar.getChildren().addAll(title, computationSelection);
@@ -234,7 +253,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         bottomBar.setPadding(new Insets(16, 16, 16, 16));
         bottomBar.setSpacing(8);
         bottomBar.setStyle("-fx-background-color: #ff7043");
-        bottomBar.setAlignment(Pos.CENTER_LEFT);
+        bottomBar.setAlignment(Pos.CENTER_RIGHT);
 
         clearAllButton = new Button("Clear all");
         clearAllButton.setOnAction(this::handleClearAllButton);
