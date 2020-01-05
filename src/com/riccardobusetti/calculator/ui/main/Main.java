@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 
 public class Main extends Application implements MainContract.BaseMainView {
 
+    private static final int WINDOW_DEFAULT_WIDTH = 648;
+    private static final int WINDOW_DEFAULT_HEIGHT = 575;
     private static final String OUTPUTS_DESCRIPTION_LABEL_NO_TEXT = "Insert a value and press compute";
     private static final int BASE_BATCH_RANGE = 1;
 
@@ -57,7 +59,7 @@ public class Main extends Application implements MainContract.BaseMainView {
 
         stage = primaryStage;
         stage.setTitle("Java FX function calculator");
-        stage.setScene(new Scene(root, 648, 575));
+        stage.setScene(new Scene(root, WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT));
         stage.setResizable(false);
         stage.show();
     }
@@ -295,6 +297,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         alert.setResizable(true);
         alert.setDialogPane(new LogDialog());
         alert.initModality(Modality.WINDOW_MODAL);
+        alert.getDialogPane().setPrefSize(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT);
         alert.show();
 
         Window window = alert.getDialogPane().getScene().getWindow();

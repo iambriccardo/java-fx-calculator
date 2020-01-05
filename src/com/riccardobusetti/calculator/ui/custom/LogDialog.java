@@ -8,7 +8,9 @@ public class LogDialog extends DialogPane {
 
     public LogDialog() {
         ListView<String> events = new ListView<>();
-        events.getItems().addAll(Logger.getInstance().getEvents());
+        for (String event : Logger.getInstance().getEvents()) {
+            events.getItems().add(0, event);
+        }
         setContent(events);
     }
 }

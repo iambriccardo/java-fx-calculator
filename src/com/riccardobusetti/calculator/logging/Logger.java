@@ -2,7 +2,10 @@ package com.riccardobusetti.calculator.logging;
 
 import com.riccardobusetti.calculator.domain.Computation;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +40,7 @@ public class Logger {
     }
 
     private String formatComputation(Computation computation, List<Integer> inputs, List<Integer> outputs) {
-        return computation.getLabel() +
+        return getCurrentDateAsString() + " | " + getComputationLabelCamelCased(computation.getLabel()) +
                 inputs.stream()
                         .map(String::valueOf)
                         .collect(Collectors.joining(", ", "(", ")")) +
@@ -45,6 +48,26 @@ public class Logger {
                 outputs.stream()
                         .map(String::valueOf)
                         .collect(Collectors.joining(", ", "[", "]"));
+    }
+
+    private String getComputationLabelCamelCased(String label) {
+        String[] words = label.toLowerCase().split(" ");
+        StringBuilder output = new StringBuilder();
+        output.append(words[0]);
+
+        for (int i = 1; i < words.length; i++) {
+            words[i] = words[i].substring(0, 1).toUpperCase() + words[i].substring(1);
+            output.append(words[i]);
+        }
+
+        return output.toString();
+    }
+
+    private String getCurrentDateAsString() {
+        Date currentDate = Calendar.getInstance().getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
+        return simpleDateFormat.format(currentDate);
     }
 
     @Override
