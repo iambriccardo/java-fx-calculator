@@ -31,7 +31,6 @@ public class MathUtil {
         return outputs;
     }
 
-
     public static int gcd(int n, int m) {
         while (n != m) {
             if (n > m) {
@@ -45,13 +44,7 @@ public class MathUtil {
     }
 
     public static int primeNumbers(int n) {
-        int numberOfPrimeNumbers = 1;
-
-        if (n > 1) {
-            numberOfPrimeNumbers += eratosthenes(n).size();
-        }
-
-        return numberOfPrimeNumbers;
+        return eratosthenes(n).size();
     }
 
     public static int coprimeNumbers(int n) {
