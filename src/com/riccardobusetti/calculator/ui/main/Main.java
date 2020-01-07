@@ -190,29 +190,40 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     @Override
     public void showGraph(List<Integer> inputs, List<Integer> outputs) {
-        gridContainer.getChildren().removeAll(graphContainer);
+        if (!gridContainer.getChildren().contains(graphContainer)) {
+            // Graph objects initialization.
+            graphContainer = new VBox();
+            Label graphDescriptionLabel = new Label("Function graph:");
+            NumberAxis xAxis = new NumberAxis();
+            NumberAxis yAxis = new NumberAxis();
+            graph = new LineChart<>(xAxis, yAxis);
+            // Graph objects setup.
+            graphContainer.setSpacing(4);
+            xAxis.setLabel("Input");
+            yAxis.setLabel("Output");
+            graph.setMaxHeight(250);
+            graph.setMaxWidth(300);
+            // Graph container population.
+            graphContainer.getChildren().addAll(graphDescriptionLabel, graph);
+            // Add graph to the right column of the grid container.
+            gridContainer.add(graphContainer, 1, 1);
+        }
 
-        // Graph objects initialization.
-        graphContainer = new VBox();
-        Label graphDescriptionLabel = new Label("Function graph:");
-        NumberAxis xAxis = new NumberAxis();
-        NumberAxis yAxis = new NumberAxis();
-        graph = new LineChart<>(xAxis, yAxis);
+        // Populate the graph.
+        // NB: there is a bug in the chart library which plots the correct sequence
+        // in a wrong way. For example 4 for the coprime function gives a strange graph but
+        // if you type 4 and some other number and then delete the number then the plot is correct.
+        // This may be due to an edge case that happens when the graph is displayed in a small space.
+        // A way to fix this is to create the graph from scratch each time a new dataset is received, but
+        // it is memory inefficient.
         XYChart.Series series = new XYChart.Series();
-        // Graph objects setup.
-        graphContainer.setSpacing(4);
-        xAxis.setLabel("Input");
-        yAxis.setLabel("Output");
-        graph.setMaxHeight(200);
-        graph.setMaxWidth(300);
         graph.setTitle(presenter.getCurrentComputation().getLabel() + " for 1 to " + outputs.size() + ":");
         series.setName("Computation of the function for 1 to " + outputs.size());
         for (int i = 0; i < inputs.size(); i++) {
             series.getData().add(new XYChart.Data<>(inputs.get(i), outputs.get(i)));
         }
+        graph.getData().clear();
         graph.getData().add(series);
-        // Graph container population.
-        graphContainer.getChildren().addAll(graphDescriptionLabel, graph);
 
         // We don't want to recreate the controls each time, thus if they are already inside of our
         // grid container we don't create them twice.
@@ -235,6 +246,7 @@ public class Main extends Application implements MainContract.BaseMainView {
             increaseButton.setMinWidth(148);
             increaseButton.setOnAction(event -> handleGraphIntervalButtonClick(true));
             graphControlsContainer.setSpacing(4);
+            // We populate the field first and then listen for any new changes.
             graphIntervalValidatableLayout.setValue(batchRange);
             // Here we listen for any text change and update the graph accordingly. We call the setValue
             // of this layout whenever we want to change the plot interval of the graph, thus from the
@@ -245,18 +257,16 @@ public class Main extends Application implements MainContract.BaseMainView {
                     performBatchComputation();
                 }
             });
-
             graphControlsMainContainer.setSpacing(4);
+            // Add controls vertically.
             graphControlsMainContainer.getChildren().addAll(
                     controlsDescription,
                     graphControlsContainer,
                     graphIntervalValidatableLayout
             );
-
+            // Add controls to the left column of the grid container.
             gridContainer.add(graphControlsMainContainer, 0, 1);
         }
-
-        gridContainer.add(graphContainer, 1, 1);
     }
 
     @Override
