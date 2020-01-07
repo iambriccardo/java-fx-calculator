@@ -1,7 +1,7 @@
 package com.riccardobusetti.calculator.ui.main;
 
 import com.riccardobusetti.calculator.domain.Computation;
-import com.riccardobusetti.calculator.logging.Logger;
+import com.riccardobusetti.calculator.history.HistoryLogger;
 import com.riccardobusetti.calculator.util.MathUtil;
 
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
             }
         }
 
-        Logger.getInstance().logComputation(currentComputation, inputs, outputs);
+        HistoryLogger.getInstance().logComputation(currentComputation, inputs, outputs);
 
         return outputs;
     }

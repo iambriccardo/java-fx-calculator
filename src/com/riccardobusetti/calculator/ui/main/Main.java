@@ -2,7 +2,7 @@ package com.riccardobusetti.calculator.ui.main;
 
 import com.riccardobusetti.calculator.domain.Computation;
 import com.riccardobusetti.calculator.domain.Constraint;
-import com.riccardobusetti.calculator.ui.custom.LogDialog;
+import com.riccardobusetti.calculator.ui.custom.HistoryDialog;
 import com.riccardobusetti.calculator.ui.custom.ValidatableLayout;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -28,6 +28,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Main class of the application where we render all the layouts in a dynamic fashion. Moreover we
+ * react to all the user inputs, clicks and more.
+ *
+ * Because in this project I didn't use FXML and Controllers, the whole UI code is very long and complex
+ * but I tried to use only the course knowledge to build this program.
+ *
+ * @author riccardobusetti
+ */
 public class Main extends Application implements MainContract.BaseMainView {
 
     private static final int WINDOW_DEFAULT_WIDTH = 648;
@@ -39,18 +48,13 @@ public class Main extends Application implements MainContract.BaseMainView {
     private List<ValidatableLayout> currentInputs = new ArrayList<>();
     private int batchRange;
 
-    private Stage stage;
     private BorderPane root;
     private GridPane gridContainer;
     private VBox inputsContainer;
-    private VBox outputsContainer;
     private VBox graphControlsMainContainer;
     private VBox graphContainer;
     private ValidatableLayout graphIntervalValidatableLayout;
     private ComboBox<Computation> computationSelection;
-    private Button clearAllButton;
-    private Button computeButton;
-    private Button logButton;
     private LineChart<Number, Number> graph;
     private Label outputsResultLabel;
 
@@ -61,14 +65,12 @@ public class Main extends Application implements MainContract.BaseMainView {
     @Override
     public void start(Stage primaryStage) throws Exception {
         setUpUi();
-
         initPresenter();
 
-        stage = primaryStage;
-        stage.setTitle("Java FX function calculator by Riccardo Busetti n.17692");
-        stage.setScene(new Scene(root, WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT));
-        stage.setResizable(false);
-        stage.show();
+        primaryStage.setTitle("Java FX function calculator by Riccardo Busetti n.17692");
+        primaryStage.setScene(new Scene(root, WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT));
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     private void setUpUi() {
@@ -139,7 +141,7 @@ public class Main extends Application implements MainContract.BaseMainView {
             currentInputs.add(layout);
             inputsContainer.getChildren().add(layout);
         });
-        computeButton = new Button("Compute");
+        Button computeButton = new Button("Compute");
         computeButton.setMinWidth(300);
         computeButton.setMaxWidth(300);
         computeButton.setOnAction(this::handleComputeButtonClick);
@@ -149,7 +151,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         computationDescriptionLabel.setTextFill(Color.GREY);
         inputsContainer.getChildren().addAll(computeButton, computationDescriptionLabel);
 
-        outputsContainer = new VBox();
+        VBox outputsContainer = new VBox();
         outputsContainer.setSpacing(16);
 
         Label outputDescriptionLabel = new Label("Function result:");
@@ -190,6 +192,7 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     @Override
     public void showGraph(List<Integer> inputs, List<Integer> outputs) {
+        // We create the graph only if it is not already present in the grid container.
         if (!gridContainer.getChildren().contains(graphContainer)) {
             // Graph objects initialization.
             graphContainer = new VBox();
@@ -299,10 +302,10 @@ public class Main extends Application implements MainContract.BaseMainView {
         bottomBar.setStyle("-fx-background-color: #ff7043");
         bottomBar.setAlignment(Pos.CENTER_LEFT);
 
-        clearAllButton = new Button("Clear all");
+        Button clearAllButton = new Button("Clear all");
         clearAllButton.setOnAction(this::handleClearAllButton);
 
-        logButton = new Button("See history");
+        Button logButton = new Button("See history");
         logButton.setOnAction(this::handleLogButtonClick);
 
         bottomBar.getChildren().addAll(clearAllButton, logButton);
@@ -319,6 +322,7 @@ public class Main extends Application implements MainContract.BaseMainView {
             }
         }
 
+        // Only if all the current inputs fields are valid we perform the computation.
         if (inputs.size() == currentInputs.size()) {
             presenter.performComputation(inputs);
         }
@@ -326,9 +330,11 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     private void handleClearAllButton(Event event) {
         outputsResultLabel.setText(OUTPUTS_DESCRIPTION_LABEL_NO_TEXT);
+
         if (presenter.getCurrentComputation().hasGraph() && graphIntervalValidatableLayout != null) {
             graphIntervalValidatableLayout.setValue(BASE_BATCH_RANGE);
         }
+
         currentInputs.forEach(ValidatableLayout::clear);
     }
 
@@ -336,7 +342,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("History of computations");
         alert.setResizable(true);
-        alert.setDialogPane(new LogDialog());
+        alert.setDialogPane(new HistoryDialog());
         alert.initModality(Modality.WINDOW_MODAL);
         alert.getDialogPane().setPrefSize(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT);
         alert.show();
@@ -352,7 +358,8 @@ public class Main extends Application implements MainContract.BaseMainView {
             if (batchRange > 1) batchRange--;
         }
 
-        if (graphIntervalValidatableLayout != null) graphIntervalValidatableLayout.setValue(batchRange);
+        if (graphIntervalValidatableLayout != null)
+            graphIntervalValidatableLayout.setValue(batchRange);
     }
 
     private void performBatchComputation() {

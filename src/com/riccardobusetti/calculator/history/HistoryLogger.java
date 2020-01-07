@@ -1,4 +1,4 @@
-package com.riccardobusetti.calculator.logging;
+package com.riccardobusetti.calculator.history;
 
 import com.riccardobusetti.calculator.domain.Computation;
 
@@ -14,18 +14,18 @@ import java.util.stream.Collectors;
  *
  * @author riccardobusetti
  */
-public class Logger {
+public class HistoryLogger {
 
-    private static Logger INSTANCE = null;
+    private static HistoryLogger INSTANCE = null;
 
     private List<String> events = new ArrayList<>();
 
-    private Logger() {
+    private HistoryLogger() {
     }
 
-    public static Logger getInstance() {
+    public static HistoryLogger getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new Logger();
+            INSTANCE = new HistoryLogger();
         }
 
         return INSTANCE;
