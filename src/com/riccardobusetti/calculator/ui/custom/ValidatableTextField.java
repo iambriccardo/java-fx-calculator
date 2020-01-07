@@ -17,7 +17,7 @@ public class ValidatableTextField extends TextField {
 
     private List<Constraint> constraints;
 
-    public ValidatableTextField(List<Constraint> constraints, boolean isMandatory, boolean isClearable) {
+    public ValidatableTextField(List<Constraint> constraints) {
         super("");
         this.constraints = constraints;
     }

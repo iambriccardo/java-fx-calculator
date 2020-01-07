@@ -1,6 +1,7 @@
 package com.riccardobusetti.calculator.ui.main;
 
 import com.riccardobusetti.calculator.domain.Computation;
+import com.riccardobusetti.calculator.domain.Constraint;
 import com.riccardobusetti.calculator.ui.custom.LogDialog;
 import com.riccardobusetti.calculator.ui.custom.ValidatableLayout;
 import javafx.application.Application;
@@ -23,6 +24,7 @@ import javafx.stage.Window;
 import javafx.util.StringConverter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,12 +46,17 @@ public class Main extends Application implements MainContract.BaseMainView {
     private VBox outputsContainer;
     private VBox graphControlsMainContainer;
     private VBox graphContainer;
+    private ValidatableLayout graphIntervalValidatableLayout;
     private ComboBox<Computation> computationSelection;
     private Button clearAllButton;
     private Button computeButton;
     private Button logButton;
     private LineChart<Number, Number> graph;
     private Label outputsResultLabel;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -126,7 +133,6 @@ public class Main extends Application implements MainContract.BaseMainView {
                     4,
                     input.getLabel(),
                     input.getConstraints(),
-                    input.isMandatory(),
                     input.isClearable()
             );
 
@@ -184,49 +190,72 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     @Override
     public void showGraph(List<Integer> inputs, List<Integer> outputs) {
-        gridContainer.getChildren().removeAll(graphControlsMainContainer, graphContainer);
+        gridContainer.getChildren().removeAll(graphContainer);
 
-        NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("Input");
-
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Output");
-
+        // Graph objects initialization.
         graphContainer = new VBox();
-        graphContainer.setSpacing(4);
-
-        Label graphDescriptionLabel = new Label("Function graph: ");
-
+        Label graphDescriptionLabel = new Label("Function graph:");
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
         graph = new LineChart<>(xAxis, yAxis);
+        XYChart.Series series = new XYChart.Series();
+        // Graph objects setup.
+        graphContainer.setSpacing(4);
+        xAxis.setLabel("Input");
+        yAxis.setLabel("Output");
         graph.setMaxHeight(200);
         graph.setMaxWidth(300);
         graph.setTitle(presenter.getCurrentComputation().getLabel() + " for 1 to " + outputs.size() + ":");
-        XYChart.Series series = new XYChart.Series();
         series.setName("Computation of the function for 1 to " + outputs.size());
         for (int i = 0; i < inputs.size(); i++) {
             series.getData().add(new XYChart.Data<>(inputs.get(i), outputs.get(i)));
         }
         graph.getData().add(series);
-
+        // Graph container population.
         graphContainer.getChildren().addAll(graphDescriptionLabel, graph);
 
-        Label controlsDescription = new Label("Decrease or increase the graph interval:");
+        // We don't want to recreate the controls each time, thus if they are already inside of our
+        // grid container we don't create them twice.
+        if (!gridContainer.getChildren().contains(graphControlsMainContainer)) {
+            // Graph controls objects initialization.
+            Label controlsDescription = new Label("Decrease or increase the graph interval:");
+            Button decraeseButton = new Button("-");
+            Button increaseButton = new Button("+");
+            HBox graphControlsContainer = new HBox(decraeseButton, increaseButton);
+            graphIntervalValidatableLayout = new ValidatableLayout(
+                    4,
+                    "Insert the extreme higher n of the plot (1 to n):",
+                    Collections.singletonList(Constraint.GREATER_THAN_0),
+                    false
+            );
+            graphControlsMainContainer = new VBox();
+            // Graph controls objects setup.
+            decraeseButton.setMinWidth(148);
+            decraeseButton.setOnAction(event -> handleGraphIntervalButtonClick(false));
+            increaseButton.setMinWidth(148);
+            increaseButton.setOnAction(event -> handleGraphIntervalButtonClick(true));
+            graphControlsContainer.setSpacing(4);
+            graphIntervalValidatableLayout.setValue(batchRange);
+            // Here we listen for any text change and update the graph accordingly. We call the setValue
+            // of this layout whenever we want to change the plot interval of the graph, thus from the
+            // two control buttons and the textfield itself.
+            graphIntervalValidatableLayout.addTextChangedListener((observable, oldValue, newValue) -> {
+                if (graphIntervalValidatableLayout.validate()) {
+                    batchRange = graphIntervalValidatableLayout.getValue();
+                    performBatchComputation();
+                }
+            });
 
-        Button decraeseButton = new Button("-");
-        decraeseButton.setMinWidth(148);
-        decraeseButton.setOnAction(event -> handleGraphIntervalButtonClick(false));
-        Button increaseButton = new Button("+");
-        increaseButton.setMinWidth(148);
-        increaseButton.setOnAction(event -> handleGraphIntervalButtonClick(true));
+            graphControlsMainContainer.setSpacing(4);
+            graphControlsMainContainer.getChildren().addAll(
+                    controlsDescription,
+                    graphControlsContainer,
+                    graphIntervalValidatableLayout
+            );
 
-        HBox graphControlsContainer = new HBox(decraeseButton, increaseButton);
-        graphControlsContainer.setSpacing(4);
+            gridContainer.add(graphControlsMainContainer, 0, 1);
+        }
 
-        graphControlsMainContainer = new VBox();
-        graphControlsMainContainer.setSpacing(4);
-        graphControlsMainContainer.getChildren().addAll(controlsDescription, graphControlsContainer);
-
-        gridContainer.add(graphControlsMainContainer, 0, 1);
         gridContainer.add(graphContainer, 1, 1);
     }
 
@@ -287,9 +316,8 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     private void handleClearAllButton(Event event) {
         outputsResultLabel.setText(OUTPUTS_DESCRIPTION_LABEL_NO_TEXT);
-        if (presenter.getCurrentComputation().hasGraph()) {
-            batchRange = BASE_BATCH_RANGE;
-            performBatchComputation();
+        if (presenter.getCurrentComputation().hasGraph() && graphIntervalValidatableLayout != null) {
+            graphIntervalValidatableLayout.setValue(BASE_BATCH_RANGE);
         }
         currentInputs.forEach(ValidatableLayout::clear);
     }
@@ -314,14 +342,10 @@ public class Main extends Application implements MainContract.BaseMainView {
             if (batchRange > 1) batchRange--;
         }
 
-        performBatchComputation();
+        if (graphIntervalValidatableLayout != null) graphIntervalValidatableLayout.setValue(batchRange);
     }
 
     private void performBatchComputation() {
         presenter.performBatchComputation(batchRange);
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

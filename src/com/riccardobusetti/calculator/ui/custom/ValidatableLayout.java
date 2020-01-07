@@ -2,6 +2,7 @@ package com.riccardobusetti.calculator.ui.custom;
 
 import com.riccardobusetti.calculator.domain.Constraint;
 import com.riccardobusetti.calculator.exception.InvalidInputException;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -24,7 +25,7 @@ public class ValidatableLayout extends VBox {
     private ValidatableTextField validatableTextField;
     private Label errorLabel;
 
-    public ValidatableLayout(double spacing, String placeHolder, List<Constraint> constraints, boolean isMandatory, boolean isClearable) {
+    public ValidatableLayout(double spacing, String placeHolder, List<Constraint> constraints, boolean isClearable) {
         super(spacing);
 
         descriptionLabel = new Label(placeHolder);
@@ -37,8 +38,8 @@ public class ValidatableLayout extends VBox {
         clearButton.setFitWidth(18);
         clearButton.setOnMouseClicked(event -> clear());
         clearButton.setVisible(false);
-        validatableTextField = new ValidatableTextField(constraints, isMandatory, isClearable);
-        validatableTextField.textProperty().addListener((observable, oldValue, newValue) -> clearButton.setVisible(!newValue.isEmpty()));
+        validatableTextField = new ValidatableTextField(constraints);
+        if (isClearable) validatableTextField.textProperty().addListener((observable, oldValue, newValue) -> clearButton.setVisible(!newValue.isEmpty()));
         StackPane textFieldContainer = new StackPane(validatableTextField, clearButton);
         StackPane.setAlignment(clearButton, Pos.CENTER_RIGHT);
         StackPane.setMargin(clearButton, new Insets(0, 4, 0, 4));
@@ -47,6 +48,10 @@ public class ValidatableLayout extends VBox {
         errorLabel.setTextFill(Color.RED);
 
         getChildren().addAll(descriptionLabel, textFieldContainer);
+    }
+
+    public void setValue(Integer value) {
+        validatableTextField.setText(value.toString());
     }
 
     public Integer getValue() {
@@ -62,6 +67,16 @@ public class ValidatableLayout extends VBox {
             showError(exception.getMessage());
             return false;
         }
+    }
+
+    public void addTextChangedListener(ChangeListener<String> listener) {
+        validatableTextField.textProperty().addListener(listener);
+    }
+
+    @Override
+    public void requestFocus() {
+        super.requestFocus();
+        validatableTextField.requestFocus();
     }
 
     public void clear() {
