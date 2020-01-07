@@ -39,7 +39,8 @@ public class ValidatableLayout extends VBox {
         clearButton.setOnMouseClicked(event -> clear());
         clearButton.setVisible(false);
         validatableTextField = new ValidatableTextField(constraints);
-        if (isClearable) validatableTextField.textProperty().addListener((observable, oldValue, newValue) -> clearButton.setVisible(!newValue.isEmpty()));
+        if (isClearable)
+            validatableTextField.textProperty().addListener((observable, oldValue, newValue) -> clearButton.setVisible(!newValue.isEmpty()));
         StackPane textFieldContainer = new StackPane(validatableTextField, clearButton);
         StackPane.setAlignment(clearButton, Pos.CENTER_RIGHT);
         StackPane.setMargin(clearButton, new Insets(0, 4, 0, 4));
@@ -50,12 +51,12 @@ public class ValidatableLayout extends VBox {
         getChildren().addAll(descriptionLabel, textFieldContainer);
     }
 
-    public void setValue(Integer value) {
-        validatableTextField.setText(value.toString());
-    }
-
     public Integer getValue() {
         return validatableTextField.getIntegerValue();
+    }
+
+    public void setValue(Integer value) {
+        validatableTextField.setText(value.toString());
     }
 
     public boolean validate() {

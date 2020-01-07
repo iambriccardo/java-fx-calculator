@@ -32,9 +32,9 @@ public interface MainContract {
 
         void getAllComputations();
 
-        void setCurrentComputation(Computation computation);
-
         Computation getCurrentComputation();
+
+        void setCurrentComputation(Computation computation);
 
         void performComputation(List<Integer> inputs);
 

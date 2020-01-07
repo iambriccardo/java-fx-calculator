@@ -36,16 +36,16 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
     }
 
     @Override
+    public Computation getCurrentComputation() {
+        return currentComputation;
+    }
+
+    @Override
     public void setCurrentComputation(Computation computation) {
         currentComputation = computation;
 
         view.clearInputs();
         view.showInputs(computation);
-    }
-
-    @Override
-    public Computation getCurrentComputation() {
-        return currentComputation;
     }
 
     @Override
