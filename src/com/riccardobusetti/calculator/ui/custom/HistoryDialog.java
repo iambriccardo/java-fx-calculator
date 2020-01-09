@@ -13,9 +13,13 @@ public class HistoryDialog extends DialogPane {
 
     public HistoryDialog() {
         ListView<String> events = new ListView<>();
-        for (String event : HistoryLogger.getInstance().getEvents()) {
+
+        for (String event: HistoryLogger.getInstance().getEvents()) {
             events.getItems().add(0, event);
         }
+
+        HistoryLogger.getInstance().observe(event -> events.getItems().add(0, event));
+
         setContent(events);
     }
 }

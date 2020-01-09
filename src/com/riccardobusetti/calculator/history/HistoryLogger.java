@@ -16,9 +16,15 @@ import java.util.stream.Collectors;
  */
 public class HistoryLogger {
 
+    public interface HistoryObserver<T> {
+
+        void observe(T history);
+    }
+
     private static HistoryLogger INSTANCE = null;
 
     private List<String> events = new ArrayList<>();
+    private HistoryObserver<String> observer;
 
     private HistoryLogger() {
     }
@@ -35,8 +41,21 @@ public class HistoryLogger {
         return events;
     }
 
+    public void observe(HistoryObserver<String> observer) {
+        this.observer = observer;
+    }
+
+    public void dispose() {
+        this.observer = null;
+    }
+
     public void logComputation(Computation computation, List<Integer> inputs, List<Integer> outputs) {
-        events.add(formatComputation(computation, inputs, outputs));
+        String formattedComputation = formatComputation(computation, inputs, outputs);
+        events.add(formattedComputation);
+
+        if (observer != null) {
+            observer.observe(formattedComputation);
+        }
     }
 
     private String formatComputation(Computation computation, List<Integer> inputs, List<Integer> outputs) {
