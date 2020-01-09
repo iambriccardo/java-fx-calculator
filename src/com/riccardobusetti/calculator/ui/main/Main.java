@@ -339,16 +339,21 @@ public class Main extends Application implements MainContract.BaseMainView {
     }
 
     private void handleLogButtonClick(Event event) {
+        HistoryDialog dialog = new HistoryDialog();
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("History of computations");
         alert.setResizable(true);
-        alert.setDialogPane(new HistoryDialog());
+        alert.setDialogPane(dialog);
         alert.initModality(Modality.WINDOW_MODAL);
         alert.getDialogPane().setPrefSize(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT);
         alert.show();
 
         Window window = alert.getDialogPane().getScene().getWindow();
-        window.setOnCloseRequest(windowsEvent -> window.hide());
+        window.setOnCloseRequest(windowsEvent -> {
+            dialog.destroy();
+            window.hide();
+        });
     }
 
     private void handleGraphIntervalButtonClick(boolean isIncreasing) {
