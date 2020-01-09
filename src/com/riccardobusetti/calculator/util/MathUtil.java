@@ -7,6 +7,10 @@ import java.util.List;
 /**
  * Class containing static methods for mathematical computations.
  *
+ * NB: all of these computations are done in the Main UI Thread which is a bad practice,
+ * in order to remain within the course topics I haven't made the computations in an async
+ * fashion.
+ *
  * @author riccardobusetti
  */
 public class MathUtil {
@@ -88,6 +92,8 @@ public class MathUtil {
 
     public static List<Integer> linearCongruentialGenerator(int a, int b, int m, int n) {
         List<Integer> outputs = new ArrayList<>();
+        // We start with x0 = 1 but we can choose any integer we want. This is done because
+        // in the assignment we don't have a base element for our recursively defined set.
         int x = 1;
 
         for (int i = 1; i <= n; i++) {
