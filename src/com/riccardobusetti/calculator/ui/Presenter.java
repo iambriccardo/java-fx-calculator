@@ -7,5 +7,9 @@ package com.riccardobusetti.calculator.ui;
  */
 public interface Presenter {
 
+    /**
+     * Starts the presenter which is going to execute its work as soon
+     * as possible.
+     */
     void start();
 }
