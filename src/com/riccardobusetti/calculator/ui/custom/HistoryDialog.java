@@ -15,7 +15,7 @@ public class HistoryDialog extends DialogPane {
         ListView<String> events = new ListView<>();
 
         // We get all the elements currently in the history.
-        for (String event: HistoryLogger.getInstance().getEvents()) {
+        for (String event : HistoryLogger.getInstance().getEvents()) {
             events.getItems().add(0, event);
         }
 

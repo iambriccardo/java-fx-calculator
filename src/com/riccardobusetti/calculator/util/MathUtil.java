@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Class containing static methods for mathematical computations.
- *
+ * <p>
  * NB: all of these computations are done in the Main UI Thread which is a bad practice,
  * in order to remain within the course topics I haven't made the computations in an async
  * fashion.

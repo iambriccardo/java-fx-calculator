@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * Main class of the application where we render all the layouts in a dynamic fashion. Moreover we
  * react to all the user inputs, clicks and more.
- *
+ * <p>
  * Because in this project I didn't use FXML and Controllers, the whole UI code is very long and complex
  * but I tried to use only the course knowledge to build this program.
  *
@@ -63,7 +63,7 @@ public class Main extends Application implements MainContract.BaseMainView {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         setUpUi();
         initPresenter();
 
@@ -219,7 +219,7 @@ public class Main extends Application implements MainContract.BaseMainView {
         // This may be due to an edge case that happens when the graph is displayed in a small space.
         // A way to fix this is to create the graph from scratch each time a new dataset is received, but
         // it is memory inefficient.
-        XYChart.Series series = new XYChart.Series();
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
         graph.setTitle(presenter.getCurrentComputation().getLabel() + " for 1 to " + outputs.size() + ":");
         series.setName("Computation of the function for 1 to " + outputs.size());
         for (int i = 0; i < inputs.size(); i++) {
@@ -282,7 +282,7 @@ public class Main extends Application implements MainContract.BaseMainView {
 
     private GridPane getToolbar() {
         GridPane toolbar = new GridPane();
-        toolbar.getColumnConstraints().add(new ColumnConstraints(WINDOW_DEFAULT_WIDTH / 3));
+        toolbar.getColumnConstraints().add(new ColumnConstraints(WINDOW_DEFAULT_WIDTH / 3.0));
         toolbar.setPadding(new Insets(16, 16, 16, 16));
         toolbar.setStyle("-fx-background-color: #ff7043");
 

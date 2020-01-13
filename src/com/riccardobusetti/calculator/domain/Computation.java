@@ -71,7 +71,7 @@ public enum Computation {
             false),
     LINEAR_CONGRUENTIAL_GENERATOR(
             "Linear congruential generator",
-            "This algorithm will compute the first n > 0 random numbers given four integers a, b, m > 0.",
+            "This algorithm will compute the first n > 0 random numbers given four integers a, b, m with m > 0.",
             Arrays.asList(
                     new Input("Insert a: ", Collections.emptyList(), true, true),
                     new Input("Insert b: ", Collections.emptyList(), true, true),

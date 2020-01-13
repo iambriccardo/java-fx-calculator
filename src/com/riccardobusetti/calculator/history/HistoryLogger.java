@@ -16,24 +16,7 @@ import java.util.stream.Collectors;
  */
 public class HistoryLogger {
 
-    /**
-     * Interface which describes the behavior that an observer must adopt
-     * in order to observe the changes happening in the history.
-     *
-     * @param <T> type of the event.
-     */
-    public interface HistoryObserver<T> {
-
-        /**
-         * Observes the history for any new events that might occur.
-         *
-         * @param event event that occurs in the history.
-         */
-        void observe(T event);
-    }
-
     private static HistoryLogger INSTANCE = null;
-
     private List<String> events = new ArrayList<>();
     private HistoryObserver<String> observer;
 
@@ -103,5 +86,21 @@ public class HistoryLogger {
     @Override
     public String toString() {
         return String.join("\n", events);
+    }
+
+    /**
+     * Interface which describes the behavior that an observer must adopt
+     * in order to observe the changes happening in the history.
+     *
+     * @param <T> type of the event.
+     */
+    public interface HistoryObserver<T> {
+
+        /**
+         * Observes the history for any new events that might occur.
+         *
+         * @param event event that occurs in the history.
+         */
+        void observe(T event);
     }
 }
