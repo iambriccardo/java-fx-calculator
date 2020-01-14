@@ -17,7 +17,7 @@ public enum Computation {
             Collections.singletonList(
                     new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_1
-                    ), true, true)
+                    ))
             ),
             false),
     GCD("Greatest common divisor",
@@ -25,10 +25,10 @@ public enum Computation {
             Arrays.asList(
                     new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
-                    ), true, true),
+                    ), true),
                     new Input("Insert m: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
-                    ), true, true)
+                    ))
             ), false),
     PRIME_NUMBERS(
             "Prime numbers number",
@@ -36,7 +36,7 @@ public enum Computation {
             Collections.singletonList(
                     new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
-                    ), true, true)
+                    ))
             ),
             true),
     COPRIME_NUMBERS(
@@ -45,7 +45,7 @@ public enum Computation {
             Collections.singletonList(
                     new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
-                    ), true, true)
+                    ))
             ),
             true),
     PRIME_FACTORIZATION(
@@ -54,7 +54,7 @@ public enum Computation {
             Collections.singletonList(
                     new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_1
-                    ), true, true)
+                    ))
             ),
             false),
     SIGMA(
@@ -63,24 +63,24 @@ public enum Computation {
             Arrays.asList(
                     new Input("Insert x: ", Collections.singletonList(
                             Constraint.GREATER_OR_EQUAL_THAN_0
-                    ), true, true),
+                    )),
                     new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_1
-                    ), true, true)
+                    ))
             ),
             false),
     LINEAR_CONGRUENTIAL_GENERATOR(
             "Linear congruential generator",
             "This algorithm will compute the first n > 0 random numbers given four integers a, b, m with m > 0.",
             Arrays.asList(
-                    new Input("Insert a: ", Collections.emptyList(), true, true),
-                    new Input("Insert b: ", Collections.emptyList(), true, true),
+                    new Input("Insert a: ", Collections.emptyList()),
+                    new Input("Insert b: ", Collections.emptyList()),
                     new Input("Insert m: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
-                    ), true, true),
+                    )),
                     new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
-                    ), true, true)
+                    ))
             ),
             false),
     PARTITION(
@@ -89,7 +89,7 @@ public enum Computation {
             Collections.singletonList(
                     new Input("Insert n: ", Collections.singletonList(
                             Constraint.GREATER_THAN_0
-                    ), true, true)
+                    ))
             ),
             true);
 

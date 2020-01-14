@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Singleton class responsible of logging all the events that occur in the app.
+ * Singleton class responsible of creating a history of all the events that occur in the app.
  *
  * @author riccardobusetti
  */

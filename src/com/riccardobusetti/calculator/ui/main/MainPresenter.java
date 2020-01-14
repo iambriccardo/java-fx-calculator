@@ -15,12 +15,12 @@ import java.util.List;
  *
  * @author riccardobusetti
  */
-public class MainPresenter implements MainContract.BaseMainPresenter {
+public class MainPresenter implements MainContract.IMainPresenter {
 
-    private MainContract.BaseMainView view;
+    private MainContract.IMainView view;
     private Computation currentComputation;
 
-    public MainPresenter(MainContract.BaseMainView view) {
+    public MainPresenter(MainContract.IMainView view) {
         this.view = view;
         start();
     }
@@ -44,7 +44,7 @@ public class MainPresenter implements MainContract.BaseMainPresenter {
     public void setCurrentComputation(Computation computation) {
         currentComputation = computation;
 
-        view.clearInputs();
+        view.clearComputationContent();
         view.showInputs(computation);
     }
 

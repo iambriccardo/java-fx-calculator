@@ -11,13 +11,15 @@ public class Input {
 
     private String label;
     private List<Constraint> constraints;
-    private boolean isMandatory;
     private boolean isClearable;
 
-    public Input(String label, List<Constraint> constraints, boolean isMandatory, boolean isClearable) {
+    public Input(String label, List<Constraint> constraints) {
+        this(label, constraints, true);
+    }
+
+    public Input(String label, List<Constraint> constraints, boolean isClearable) {
         this.label = label;
         this.constraints = constraints;
-        this.isMandatory = isMandatory;
         this.isClearable = isClearable;
     }
 
@@ -27,10 +29,6 @@ public class Input {
 
     public List<Constraint> getConstraints() {
         return constraints;
-    }
-
-    public boolean isMandatory() {
-        return isMandatory;
     }
 
     public boolean isClearable() {

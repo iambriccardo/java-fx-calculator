@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  *
  * @author riccardobusetti
  */
-public class Main extends Application implements MainContract.BaseMainView {
+public class Main extends Application implements MainContract.IMainView {
 
     private static final int WINDOW_DEFAULT_WIDTH = 648;
     private static final int WINDOW_DEFAULT_HEIGHT = 575;
@@ -273,7 +273,7 @@ public class Main extends Application implements MainContract.BaseMainView {
     }
 
     @Override
-    public void clearInputs() {
+    public void clearComputationContent() {
         if (inputsContainer != null) {
             currentInputs.clear();
             root.getChildren().remove(gridContainer);
