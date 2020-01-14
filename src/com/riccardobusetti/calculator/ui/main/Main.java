@@ -258,6 +258,9 @@ public class Main extends Application implements MainContract.IMainView {
                 if (graphIntervalValidatableLayout.validate()) {
                     int newBatchRange = graphIntervalValidatableLayout.getValue();
 
+                    // We only perform the computation if the newBatchRange is different from the previous
+                    // one, otherwise we are wasting computing power because our functions are all pure
+                    // with no edge cases.
                     if (newBatchRange != batchRange) {
                         batchRange = newBatchRange;
                         performBatchComputation();
@@ -361,8 +364,6 @@ public class Main extends Application implements MainContract.IMainView {
     }
 
     private void handleGraphIntervalButtonClick(boolean isIncreasing) {
-        // We use this variable to actually see if we changed the range
-        // in order to avoid unnecessary computations.
         int newBatchRange = batchRange;
 
         if (isIncreasing) {
@@ -371,9 +372,8 @@ public class Main extends Application implements MainContract.IMainView {
             if (batchRange > BASE_BATCH_RANGE) newBatchRange--;
         }
 
-        if (graphIntervalValidatableLayout != null && newBatchRange != batchRange) {
-            batchRange = newBatchRange;
-            graphIntervalValidatableLayout.setValue(batchRange);
+        if (graphIntervalValidatableLayout != null) {
+            graphIntervalValidatableLayout.setValue(newBatchRange);
         }
     }
 
