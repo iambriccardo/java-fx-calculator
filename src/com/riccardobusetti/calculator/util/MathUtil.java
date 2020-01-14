@@ -47,11 +47,11 @@ public class MathUtil {
         return n;
     }
 
-    public static int primeNumbers(int n) {
+    public static int primeNumbersNumber(int n) {
         return eratosthenes(n).size();
     }
 
-    public static int coprimeNumbers(int n) {
+    public static int eulersTotient(int n) {
         int numberOfCoprimeNumbers = 0;
 
         for (int i = 1; i <= n; i++) {

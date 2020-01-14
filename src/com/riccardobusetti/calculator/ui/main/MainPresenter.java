@@ -71,22 +71,22 @@ public class MainPresenter implements MainContract.IMainPresenter {
 
         if (currentComputation != null) {
             switch (currentComputation) {
-                case ERATOSTHENES:
+                case ERATOSTHENES_ALGORITHM:
                     outputs.addAll(MathUtil.eratosthenes(inputs.get(0)));
                     break;
                 case GCD:
                     outputs.add(MathUtil.gcd(inputs.get(0), inputs.get(1)));
                     break;
-                case PRIME_NUMBERS:
-                    outputs.add(MathUtil.primeNumbers(inputs.get(0)));
+                case PRIME_NUMBERS_NUMBER:
+                    outputs.add(MathUtil.primeNumbersNumber(inputs.get(0)));
                     break;
-                case COPRIME_NUMBERS:
-                    outputs.add(MathUtil.coprimeNumbers(inputs.get(0)));
+                case EULERS_TOTIENT:
+                    outputs.add(MathUtil.eulersTotient(inputs.get(0)));
                     break;
                 case PRIME_FACTORIZATION:
                     outputs.addAll(MathUtil.primeFactorization(inputs.get(0)));
                     break;
-                case SIGMA:
+                case SIGMA_FUNCTION:
                     outputs.add(MathUtil.sigma(inputs.get(0), inputs.get(1)));
                     break;
                 case LINEAR_CONGRUENTIAL_GENERATOR:
@@ -97,7 +97,7 @@ public class MainPresenter implements MainContract.IMainPresenter {
                             inputs.get(3))
                     );
                     break;
-                case PARTITION:
+                case PARTITION_FUNCTION:
                     outputs.add(MathUtil.partition(inputs.get(0)));
                     break;
             }

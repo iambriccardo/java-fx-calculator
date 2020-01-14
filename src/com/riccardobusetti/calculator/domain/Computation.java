@@ -11,7 +11,7 @@ import java.util.List;
  * @author riccardobusetti
  */
 public enum Computation {
-    ERATOSTHENES(
+    ERATOSTHENES_ALGORITHM(
             "Eratosthenes algorithm",
             "This algorithm will compute all the prime numbers smaller or equal than n > 1.",
             Collections.singletonList(
@@ -30,7 +30,7 @@ public enum Computation {
                             Constraint.GREATER_THAN_0
                     ))
             ), false),
-    PRIME_NUMBERS(
+    PRIME_NUMBERS_NUMBER(
             "Prime numbers number",
             "This algorithm will compute the number of prime numbers smaller or equal than n > 0.",
             Collections.singletonList(
@@ -39,8 +39,8 @@ public enum Computation {
                     ))
             ),
             true),
-    COPRIME_NUMBERS(
-            "Coprime numbers number",
+    EULERS_TOTIENT(
+            "Euler's totient",
             "This algorithm will compute the number of positive integers that are coprime with n > 0.",
             Collections.singletonList(
                     new Input("Insert n: ", Collections.singletonList(
@@ -57,7 +57,7 @@ public enum Computation {
                     ))
             ),
             false),
-    SIGMA(
+    SIGMA_FUNCTION(
             "Sigma function",
             "This algorithm will compute the sigma function with x >= 0 and n > 1.",
             Arrays.asList(
@@ -83,7 +83,7 @@ public enum Computation {
                     ))
             ),
             false),
-    PARTITION(
+    PARTITION_FUNCTION(
             "Partition function",
             "This algorithm will compute the partition function for n > 1.",
             Collections.singletonList(
