@@ -58,9 +58,9 @@ public class HistoryLogger {
                         .map(String::valueOf)
                         .collect(Collectors.joining(", ", "(", ")")) +
                 " -> " +
-                outputs.stream()
+                (outputs != null ? outputs.stream()
                         .map(String::valueOf)
-                        .collect(Collectors.joining(", ", "[", "]"));
+                        .collect(Collectors.joining(", ", "[", "]")) : "An error occurred during the computation, thus no outputs are available.");
     }
 
     private String getComputationLabelCamelCased(String label) {

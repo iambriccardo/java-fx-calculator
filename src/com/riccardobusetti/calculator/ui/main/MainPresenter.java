@@ -50,7 +50,10 @@ public class MainPresenter implements MainContract.IMainPresenter {
 
     @Override
     public void performComputation(List<Integer> inputs) {
-        view.showOutputs(getOutputs(inputs));
+        List<Integer> outputs = getGuardedOutputs(inputs);
+
+        if (outputs != null)
+            view.showOutputs(outputs);
     }
 
     @Override
@@ -60,13 +63,28 @@ public class MainPresenter implements MainContract.IMainPresenter {
 
         for (int i = 1; i <= n; i++) {
             inputs.add(i);
-            outputs.add(getOutputs(Collections.singletonList(i)).get(0));
+
+            List<Integer> functionOutputs = getGuardedOutputs(Collections.singletonList(i));
+
+            if (functionOutputs != null && functionOutputs.size() > 0)
+                outputs.add(functionOutputs.get(0));
         }
 
-        view.showGraph(inputs, outputs);
+        if (inputs.size() == outputs.size())
+            view.showGraph(inputs, outputs);
     }
 
-    private List<Integer> getOutputs(List<Integer> inputs) {
+    private List<Integer> getGuardedOutputs(List<Integer> inputs) {
+        try {
+            return getOutputs(inputs);
+        } catch (Exception exception) {
+            view.showError("There was an error during " + currentComputation.getLabel() + " computation.\n" + exception.getMessage());
+            HistoryLogger.getInstance().logComputation(currentComputation, inputs, null);
+            return null;
+        }
+    }
+
+    private List<Integer> getOutputs(List<Integer> inputs) throws Exception {
         List<Integer> outputs = new ArrayList<>();
 
         if (currentComputation != null) {

@@ -280,6 +280,11 @@ public class Main extends Application implements MainContract.IMainView {
     }
 
     @Override
+    public void showError(String text) {
+        showErrorAlert(text);
+    }
+
+    @Override
     public void clearComputationContent() {
         if (inputsContainer != null) {
             currentInputs.clear();
@@ -379,5 +384,12 @@ public class Main extends Application implements MainContract.IMainView {
 
     private void performBatchComputation() {
         presenter.performBatchComputation(batchRange);
+    }
+
+    private void showErrorAlert(String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("An error occurred");
+        alert.setContentText(text);
+        alert.showAndWait();
     }
 }

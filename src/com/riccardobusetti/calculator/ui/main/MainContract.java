@@ -54,6 +54,13 @@ public interface MainContract {
         void showGraph(List<Integer> inputs, List<Integer> outputs);
 
         /**
+         * Shows an error to the user.
+         *
+         * @param text text that must be displayed to the user.
+         */
+        void showError(String text);
+
+        /**
          * Clears all the content of the current computation.
          */
         void clearComputationContent();
