@@ -256,8 +256,12 @@ public class Main extends Application implements MainContract.IMainView {
             // two control buttons and the textfield itself.
             graphIntervalValidatableLayout.addTextChangedListener((observable, oldValue, newValue) -> {
                 if (graphIntervalValidatableLayout.validate()) {
-                    batchRange = graphIntervalValidatableLayout.getValue();
-                    performBatchComputation();
+                    int newBatchRange = graphIntervalValidatableLayout.getValue();
+
+                    if (newBatchRange != batchRange) {
+                        batchRange = newBatchRange;
+                        performBatchComputation();
+                    }
                 }
             });
             graphControlsMainContainer.setSpacing(4);
@@ -357,14 +361,20 @@ public class Main extends Application implements MainContract.IMainView {
     }
 
     private void handleGraphIntervalButtonClick(boolean isIncreasing) {
+        // We use this variable to actually see if we changed the range
+        // in order to avoid unnecessary computations.
+        int newBatchRange = batchRange;
+
         if (isIncreasing) {
-            batchRange++;
+            newBatchRange++;
         } else {
-            if (batchRange > 1) batchRange--;
+            if (batchRange > BASE_BATCH_RANGE) newBatchRange--;
         }
 
-        if (graphIntervalValidatableLayout != null)
+        if (graphIntervalValidatableLayout != null && newBatchRange != batchRange) {
+            batchRange = newBatchRange;
             graphIntervalValidatableLayout.setValue(batchRange);
+        }
     }
 
     private void performBatchComputation() {
