@@ -103,6 +103,6 @@ public class MathUtil {
     }
 
     public static int partition(int n) {
-        return (int) ((1 / (4 * n * Math.sqrt(3))) * Math.pow(Math.E, (Math.PI * Math.sqrt((2 * n) / 3.0))));
+        return (int) ((1 / (4 * n * Math.sqrt(3))) * Math.exp(Math.PI * Math.sqrt((2 * n) / 3.0)));
     }
 }
