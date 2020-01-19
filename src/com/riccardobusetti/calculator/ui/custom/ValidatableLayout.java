@@ -10,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class ValidatableLayout extends VBox {
         StackPane.setMargin(clearButton, new Insets(0, 4, 0, 4));
 
         errorLabel = new Label();
-        errorLabel.setTextFill(Color.RED);
+        errorLabel.getStyleClass().add("error-label");
 
         getChildren().addAll(descriptionLabel, textFieldContainer);
     }

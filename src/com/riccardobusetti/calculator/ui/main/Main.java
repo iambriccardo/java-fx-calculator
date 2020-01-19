@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 public class Main extends Application implements MainContract.IMainView {
 
     private static final int WINDOW_DEFAULT_WIDTH = 648;
-    private static final int WINDOW_DEFAULT_HEIGHT = 575;
+    private static final int WINDOW_DEFAULT_HEIGHT = 600;
     private static final String OUTPUTS_DESCRIPTION_LABEL_NO_TEXT = "Insert a value and press compute";
     private static final int BASE_BATCH_RANGE = 1;
 
@@ -67,15 +67,17 @@ public class Main extends Application implements MainContract.IMainView {
         setUpUi();
         initPresenter();
 
+        Scene scene = new Scene(root, WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT);
+        scene.getStylesheets().add("res/styles.css");
+
         primaryStage.setTitle("Java FX function calculator by Riccardo Busetti n.17692");
-        primaryStage.setScene(new Scene(root, WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT));
+        primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
     }
 
     private void setUpUi() {
         root = new BorderPane();
-        root.setStyle("-fx-background-color: white");
 
         ImageView upwardArrow = new ImageView();
         // This animation has been taken from https://lottiefiles.com/4033-uploading credits to Akash Nidhi.
@@ -147,8 +149,7 @@ public class Main extends Application implements MainContract.IMainView {
         computeButton.setOnAction(this::handleComputeButtonClick);
         Label computationDescriptionLabel = new Label(computation.getDescription());
         computationDescriptionLabel.setWrapText(true);
-        computationDescriptionLabel.setStyle("-fx-font: 12 arial");
-        computationDescriptionLabel.setTextFill(Color.GREY);
+        computationDescriptionLabel.getStyleClass().add("description-label");
         inputsContainer.getChildren().addAll(computeButton, computationDescriptionLabel);
 
         VBox outputsContainer = new VBox();
@@ -157,7 +158,7 @@ public class Main extends Application implements MainContract.IMainView {
         Label outputDescriptionLabel = new Label("Function result:");
         outputsResultLabel = new Label(OUTPUTS_DESCRIPTION_LABEL_NO_TEXT);
         outputsResultLabel.setTextFill(Color.BLACK);
-        outputsResultLabel.setStyle("-fx-font: 18 arial;");
+        outputsResultLabel.getStyleClass().add("result-label");
         outputsResultLabel.setWrapText(true);
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -296,10 +297,10 @@ public class Main extends Application implements MainContract.IMainView {
         GridPane toolbar = new GridPane();
         toolbar.getColumnConstraints().add(new ColumnConstraints(WINDOW_DEFAULT_WIDTH / 3.0));
         toolbar.setPadding(new Insets(16, 16, 16, 16));
-        toolbar.setStyle("-fx-background-color: #ff7043");
+        toolbar.getStyleClass().add("menu-bar");
 
         Label title = new Label("Function Calculator");
-        title.setStyle("-fx-font: 16 arial;");
+        title.getStyleClass().add("title-label");
 
         toolbar.add(title, 0, 0);
         toolbar.add(computationSelection, 1, 0);
@@ -311,7 +312,7 @@ public class Main extends Application implements MainContract.IMainView {
         HBox bottomBar = new HBox();
         bottomBar.setPadding(new Insets(16, 16, 16, 16));
         bottomBar.setSpacing(8);
-        bottomBar.setStyle("-fx-background-color: #ff7043");
+        bottomBar.getStyleClass().add("menu-bar");
         bottomBar.setAlignment(Pos.CENTER_LEFT);
 
         Button clearAllButton = new Button("Clear all");
