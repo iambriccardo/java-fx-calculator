@@ -46,6 +46,9 @@ public class MathUtil {
 
     /**
      * Computes the greatest common divisor between two integers.
+     * <p>
+     * This implementation is done with the subtract method which is explained
+     * here: https://en.wikipedia.org/wiki/Euclidean_algorithm under implementations.
      *
      * @param n first integer.
      * @param m second integer.
