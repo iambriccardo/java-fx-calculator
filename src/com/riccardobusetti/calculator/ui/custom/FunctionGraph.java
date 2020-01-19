@@ -2,7 +2,6 @@ package com.riccardobusetti.calculator.ui.custom;
 
 import com.riccardobusetti.calculator.domain.Computation;
 import javafx.collections.FXCollections;
-import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
