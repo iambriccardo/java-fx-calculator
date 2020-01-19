@@ -50,7 +50,7 @@ public class MainPresenter implements MainContract.IMainPresenter {
 
     @Override
     public void performComputation(List<Integer> inputs) {
-        List<Integer> outputs = getGuardedOutputs(inputs);
+        List<Integer> outputs = getOutputsGuarded(inputs);
 
         if (outputs != null)
             view.showOutputs(outputs);
@@ -64,7 +64,7 @@ public class MainPresenter implements MainContract.IMainPresenter {
         for (int i = 1; i <= n; i++) {
             inputs.add(i);
 
-            List<Integer> functionOutputs = getGuardedOutputs(Collections.singletonList(i));
+            List<Integer> functionOutputs = getOutputsGuarded(Collections.singletonList(i));
 
             if (functionOutputs != null && functionOutputs.size() > 0)
                 outputs.add(functionOutputs.get(0));
@@ -74,7 +74,7 @@ public class MainPresenter implements MainContract.IMainPresenter {
             view.showGraph(inputs, outputs);
     }
 
-    private List<Integer> getGuardedOutputs(List<Integer> inputs) {
+    private List<Integer> getOutputsGuarded(List<Integer> inputs) {
         try {
             return getOutputs(inputs);
         } catch (Exception exception) {

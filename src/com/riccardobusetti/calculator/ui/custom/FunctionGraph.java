@@ -18,7 +18,7 @@ public class FunctionGraph extends LineChart<Number, Number> {
     private Computation computation;
 
     public FunctionGraph(Computation computation) {
-        super(new NumberAxis() , new NumberAxis());
+        super(new NumberAxis(), new NumberAxis());
         this.computation = computation;
         init();
     }
@@ -29,7 +29,7 @@ public class FunctionGraph extends LineChart<Number, Number> {
         setLegendVisible(false);
     }
 
-    public void applyCustomSize() {
+    public void fitInGrid() {
         setMaxHeight(250);
         setMaxWidth(300);
     }

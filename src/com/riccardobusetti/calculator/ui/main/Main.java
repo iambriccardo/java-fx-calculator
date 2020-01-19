@@ -7,7 +7,6 @@ import com.riccardobusetti.calculator.ui.custom.HistoryDialog;
 import com.riccardobusetti.calculator.ui.custom.ValidatableLayout;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -130,6 +129,7 @@ public class Main extends Application implements MainContract.IMainView {
         inputsContainer.setMinWidth(300);
         inputsContainer.setMaxWidth(300);
         inputsContainer.setSpacing(16);
+
         computation.getInputs().forEach(input -> {
             ValidatableLayout layout = new ValidatableLayout(
                     4,
@@ -141,28 +141,34 @@ public class Main extends Application implements MainContract.IMainView {
             currentInputs.add(layout);
             inputsContainer.getChildren().add(layout);
         });
+
         Button computeButton = new Button("Compute");
         computeButton.setMinWidth(300);
         computeButton.setMaxWidth(300);
-        computeButton.setOnAction(this::handleComputeButtonClick);
+        computeButton.setOnAction(e -> handleComputeButtonClick());
+
         Label computationDescriptionLabel = new Label(computation.getDescription());
         computationDescriptionLabel.setWrapText(true);
         computationDescriptionLabel.getStyleClass().add("description-label");
+
         inputsContainer.getChildren().addAll(computeButton, computationDescriptionLabel);
 
         VBox outputsContainer = new VBox();
         outputsContainer.setSpacing(16);
 
         Label outputDescriptionLabel = new Label("Function result:");
+
         outputsResultLabel = new Label(OUTPUTS_DESCRIPTION_LABEL_NO_TEXT);
         outputsResultLabel.setTextFill(Color.BLACK);
         outputsResultLabel.getStyleClass().add("result-label");
         outputsResultLabel.setWrapText(true);
+
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setPrefSize(300, 50);
         scrollPane.setContent(outputsResultLabel);
+
         VBox outputsLabelsContainer = new VBox(outputDescriptionLabel, scrollPane);
         outputsLabelsContainer.setSpacing(4);
         outputsContainer.getChildren().add(outputsLabelsContainer);
@@ -170,7 +176,6 @@ public class Main extends Application implements MainContract.IMainView {
         gridContainer.getColumnConstraints().add(new ColumnConstraints(300));
         GridPane.setVgrow(inputsContainer, Priority.ALWAYS);
         GridPane.setVgrow(outputsContainer, Priority.ALWAYS);
-
         gridContainer.add(inputsContainer, 0, 0);
         gridContainer.add(outputsContainer, 1, 0);
 
@@ -194,7 +199,7 @@ public class Main extends Application implements MainContract.IMainView {
         if (!gridContainer.getChildren().contains(graph)) {
             // Graph object initialization.
             graph = new FunctionGraph(presenter.getCurrentComputation());
-            graph.applyCustomSize();
+            graph.fitInGrid();
             // Add graph to the right column of the grid container.
             gridContainer.add(graph, 1, 1);
         }
@@ -205,25 +210,25 @@ public class Main extends Application implements MainContract.IMainView {
         // We don't want to recreate the controls each time, thus if they are already inside of our
         // grid container we don't create them twice.
         if (!gridContainer.getChildren().contains(graphControlsMainContainer)) {
-            // Graph controls objects initialization.
             Label controlsDescription = new Label("Decrease or increase the graph interval:");
-            Button decraeseButton = new Button("-");
+
+            Button decreaseButton = new Button("-");
+            decreaseButton.setMinWidth(148);
+            decreaseButton.setOnAction(event -> handleGraphIntervalButtonClick(false));
+
             Button increaseButton = new Button("+");
-            HBox graphControlsContainer = new HBox(decraeseButton, increaseButton);
+            increaseButton.setMinWidth(148);
+            increaseButton.setOnAction(event -> handleGraphIntervalButtonClick(true));
+
+            HBox graphControlsContainer = new HBox(decreaseButton, increaseButton);
+            graphControlsContainer.setSpacing(4);
+
             graphIntervalValidatableLayout = new ValidatableLayout(
                     4,
                     "Plot from 1 to:",
                     Collections.singletonList(Constraint.GREATER_THAN_0),
                     false
             );
-            graphControlsMainContainer = new VBox();
-            graphControlsMainContainer.setSpacing(4);
-            // Graph controls objects setup.
-            decraeseButton.setMinWidth(148);
-            decraeseButton.setOnAction(event -> handleGraphIntervalButtonClick(false));
-            increaseButton.setMinWidth(148);
-            increaseButton.setOnAction(event -> handleGraphIntervalButtonClick(true));
-            graphControlsContainer.setSpacing(4);
             // We populate the field first and then listen for any new changes.
             graphIntervalValidatableLayout.setValue(batchRange);
             // Here we listen for any text change and update the graph accordingly. We call the setValue
@@ -242,13 +247,17 @@ public class Main extends Application implements MainContract.IMainView {
                     }
                 }
             });
+
+            graphControlsMainContainer = new VBox();
             graphControlsMainContainer.setSpacing(4);
+
             // Add controls vertically.
             graphControlsMainContainer.getChildren().addAll(
                     controlsDescription,
                     graphControlsContainer,
                     graphIntervalValidatableLayout
             );
+
             // Add controls to the left column of the grid container.
             gridContainer.add(graphControlsMainContainer, 0, 1);
         }
@@ -292,17 +301,17 @@ public class Main extends Application implements MainContract.IMainView {
         bottomBar.setEffect(getMenuBarShadow());
 
         Button clearAllButton = new Button("Clear all");
-        clearAllButton.setOnAction(this::handleClearAllButton);
+        clearAllButton.setOnAction(e -> handleClearAllButton());
 
         Button logButton = new Button("See history");
-        logButton.setOnAction(this::handleLogButtonClick);
+        logButton.setOnAction(e -> handleLogButtonClick());
 
         bottomBar.getChildren().addAll(clearAllButton, logButton);
 
         return bottomBar;
     }
 
-    private void handleComputeButtonClick(Event event) {
+    private void handleComputeButtonClick() {
         List<Integer> inputs = new ArrayList<>();
 
         for (ValidatableLayout layout : currentInputs) {
@@ -317,7 +326,7 @@ public class Main extends Application implements MainContract.IMainView {
         }
     }
 
-    private void handleClearAllButton(Event event) {
+    private void handleClearAllButton() {
         outputsResultLabel.setText(OUTPUTS_DESCRIPTION_LABEL_NO_TEXT);
 
         if (presenter.getCurrentComputation().hasGraph() && graphIntervalValidatableLayout != null) {
@@ -327,7 +336,7 @@ public class Main extends Application implements MainContract.IMainView {
         currentInputs.forEach(ValidatableLayout::clear);
     }
 
-    private void handleLogButtonClick(Event event) {
+    private void handleLogButtonClick() {
         HistoryDialog dialog = new HistoryDialog();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
