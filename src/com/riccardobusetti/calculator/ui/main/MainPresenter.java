@@ -25,21 +25,33 @@ public class MainPresenter implements MainContract.IMainPresenter {
         start();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start() {
         getAllComputations();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void getAllComputations() {
         view.showComputationSelection(Arrays.asList(Computation.values()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Computation getCurrentComputation() {
         return currentComputation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setCurrentComputation(Computation computation) {
         currentComputation = computation;
@@ -48,14 +60,20 @@ public class MainPresenter implements MainContract.IMainPresenter {
         view.showInputs(computation);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void performComputation(List<Integer> inputs) {
-        List<Integer> outputs = getOutputsGuarded(inputs);
+        List<Integer> outputs = executeComputationGuarded(inputs);
 
         if (outputs != null)
             view.showOutputs(outputs);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void performBatchComputation(int n) {
         List<Integer> inputs = new ArrayList<>();
@@ -64,8 +82,11 @@ public class MainPresenter implements MainContract.IMainPresenter {
         for (int i = 1; i <= n; i++) {
             inputs.add((i - 1), i);
 
-            List<Integer> functionOutputs = getOutputsGuarded(Collections.singletonList(i));
+            List<Integer> functionOutputs = executeComputationGuarded(Collections.singletonList(i));
 
+            // We check if the computation happened successfully, otherwise we
+            // stop the batch computation. This is done to prevent error propagation
+            // through all the next values of the interval.
             if (functionOutputs != null && functionOutputs.size() > 0) {
                 outputs.add(functionOutputs.get(0));
             } else if (functionOutputs == null) {
@@ -78,9 +99,16 @@ public class MainPresenter implements MainContract.IMainPresenter {
             view.showGraph(inputs, outputs);
     }
 
-    private List<Integer> getOutputsGuarded(List<Integer> inputs) {
+    /**
+     * Performs the computation in a guarder fashion, which handles any exception
+     * thrown by the functions.
+     *
+     * @param inputs inputs of the function.
+     * @return outputs of the function or null if an exception has been thrown.
+     */
+    private List<Integer> executeComputationGuarded(List<Integer> inputs) {
         try {
-            return getOutputs(inputs);
+            return executeComputation(inputs);
         } catch (Exception exception) {
             view.showError("Error during " + currentComputation.getLabel() + " computation.\n\n" + exception.getMessage());
             HistoryLogger.getInstance().logComputation(currentComputation, inputs, null);
@@ -88,7 +116,14 @@ public class MainPresenter implements MainContract.IMainPresenter {
         }
     }
 
-    private List<Integer> getOutputs(List<Integer> inputs) throws Exception {
+    /**
+     * Performs the computation.
+     *
+     * @param inputs inputs of the function.
+     * @return outputs of the function.
+     * @throws Exception is thrown if an error occurs during the computation.
+     */
+    private List<Integer> executeComputation(List<Integer> inputs) throws Exception {
         List<Integer> outputs = new ArrayList<>();
 
         if (currentComputation != null) {

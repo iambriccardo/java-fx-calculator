@@ -93,6 +93,9 @@ public class Main extends Application implements MainContract.IMainView {
         presenter = new MainPresenter(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showComputationSelection(List<Computation> computations) {
         if (root != null) {
@@ -118,6 +121,9 @@ public class Main extends Application implements MainContract.IMainView {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showInputs(Computation computation) {
         gridContainer = new GridPane();
@@ -186,6 +192,9 @@ public class Main extends Application implements MainContract.IMainView {
         root.setBottom(getBottomBar());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showOutputs(List<Integer> outputs) {
         outputsResultLabel.setText(outputs.stream()
@@ -193,6 +202,9 @@ public class Main extends Application implements MainContract.IMainView {
                 .collect(Collectors.joining(", ")));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showGraph(List<Integer> inputs, List<Integer> outputs) {
         // We create the graph only if it is not already present in the grid container.
@@ -263,11 +275,17 @@ public class Main extends Application implements MainContract.IMainView {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showError(String text) {
         showErrorAlert(text);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clearComputationContent() {
         if (inputsContainer != null) {

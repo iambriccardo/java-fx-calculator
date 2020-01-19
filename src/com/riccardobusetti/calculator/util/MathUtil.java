@@ -17,6 +17,13 @@ import java.util.List;
  */
 public class MathUtil {
 
+    /**
+     * Computes all the prime numbers smaller or equal than input using Eratosthenes
+     * algorithm.
+     *
+     * @param n integers used as a boundary of the computation.
+     * @return all the prime numbers smaller or equal than n.
+     */
     public static List<Integer> eratosthenes(int n) {
         boolean[] a = new boolean[n + 1];
         Arrays.fill(a, true);
@@ -37,6 +44,13 @@ public class MathUtil {
         return outputs;
     }
 
+    /**
+     * Computes the greatest common divisor between two integers.
+     *
+     * @param n first integer.
+     * @param m second integer.
+     * @return greatest common divisor.
+     */
     public static int gcd(int n, int m) {
         while (n != m) {
             if (n > m) {
@@ -49,10 +63,22 @@ public class MathUtil {
         return n;
     }
 
+    /**
+     * Computes the number of prime numbers smaller or equal than input.
+     *
+     * @param n integers used as a boundary of the computation.
+     * @return number of prime numbers.
+     */
     public static int primeNumbersNumber(int n) {
         return eratosthenes(n).size();
     }
 
+    /**
+     * Computes the Euler's totient which is the number of coprime numbers with n.
+     *
+     * @param n integer used for the computation.
+     * @return the number of coprime numbers.
+     */
     public static int eulersTotient(int n) {
         int numberOfCoprimeNumbers = 0;
 
@@ -63,6 +89,12 @@ public class MathUtil {
         return numberOfCoprimeNumbers;
     }
 
+    /**
+     * Computes the prime factorization for a given input.
+     *
+     * @param n inputs to compute the prime factorization of.
+     * @return all the prime factors of the input.
+     */
     public static List<Integer> primeFactorization(int n) {
         List<Integer> outputs = new ArrayList<>();
         int i = 2;
@@ -80,6 +112,15 @@ public class MathUtil {
         return outputs;
     }
 
+    /**
+     * Computes the sigma function.
+     * <p>
+     * E.g. sigma(0,14) = 1^0 + 2^0 + 7^0 + 14^0 = 4
+     *
+     * @param x exponent.
+     * @param n base.
+     * @return the sigma function result.
+     */
     public static int sigma(int x, int n) {
         int result = 0;
 
@@ -92,6 +133,16 @@ public class MathUtil {
         return result;
     }
 
+    /**
+     * Computes the linear congruential generator which is described by this formula:
+     * xn+1 = (axn + b) % m with x0 = 0.
+     *
+     * @param a first integer.
+     * @param b second integer.
+     * @param m third integer.
+     * @param n fourth integer.
+     * @return all the randomly generated numbers.
+     */
     public static List<Integer> linearCongruentialGenerator(int a, int b, int m, int n) {
         List<Integer> outputs = new ArrayList<>();
         int x = 0;
@@ -104,6 +155,13 @@ public class MathUtil {
         return outputs;
     }
 
+    /**
+     * Computes the partition function of a given integer.
+     *
+     * @param n integer to find the partition of.
+     * @return the number of partitions which make up the input.
+     * @throws Exception thrown when the computation has an error.
+     */
     public static int partition(int n) throws Exception {
         int result = (int) ((1 / (4 * n * Math.sqrt(3))) * Math.exp(Math.PI * Math.sqrt((2 * n) / 3.0)));
 

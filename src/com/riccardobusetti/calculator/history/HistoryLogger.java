@@ -23,6 +23,13 @@ public class HistoryLogger {
     private HistoryLogger() {
     }
 
+    /**
+     * Gets the singleton instance of this object.
+     * <p>
+     * This method is key as this object is implemented as a singleton.
+     *
+     * @return the instance of the object.
+     */
     public static HistoryLogger getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new HistoryLogger();
