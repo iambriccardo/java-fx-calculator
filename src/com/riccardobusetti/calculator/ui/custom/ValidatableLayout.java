@@ -20,14 +20,13 @@ import java.util.List;
  */
 public class ValidatableLayout extends VBox {
 
-    private Label descriptionLabel;
     private ValidatableTextField validatableTextField;
     private Label errorLabel;
 
     public ValidatableLayout(double spacing, String placeHolder, List<Constraint> constraints, boolean isClearable) {
         super(spacing);
 
-        descriptionLabel = new Label(placeHolder);
+        Label descriptionLabel = new Label(placeHolder);
 
         ImageView clearButton = new ImageView();
         // This icon has been taken from https://material.io/resources/icons/?search=clear&icon=clear&style=round credits to Google.
@@ -37,9 +36,11 @@ public class ValidatableLayout extends VBox {
         clearButton.setFitWidth(18);
         clearButton.setOnMouseClicked(event -> clear());
         clearButton.setVisible(false);
+
         validatableTextField = new ValidatableTextField(constraints);
         if (isClearable)
             validatableTextField.textProperty().addListener((observable, oldValue, newValue) -> clearButton.setVisible(!newValue.isEmpty()));
+
         StackPane textFieldContainer = new StackPane(validatableTextField, clearButton);
         StackPane.setAlignment(clearButton, Pos.CENTER_RIGHT);
         StackPane.setMargin(clearButton, new Insets(0, 4, 0, 4));
