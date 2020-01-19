@@ -2,6 +2,7 @@ package com.riccardobusetti.calculator.ui.main;
 
 import com.riccardobusetti.calculator.domain.Computation;
 import com.riccardobusetti.calculator.domain.Constraint;
+import com.riccardobusetti.calculator.ui.custom.FunctionGraph;
 import com.riccardobusetti.calculator.ui.custom.HistoryDialog;
 import com.riccardobusetti.calculator.ui.custom.ValidatableLayout;
 import javafx.application.Application;
@@ -52,10 +53,9 @@ public class Main extends Application implements MainContract.IMainView {
     private GridPane gridContainer;
     private VBox inputsContainer;
     private VBox graphControlsMainContainer;
-    private VBox graphContainer;
     private ValidatableLayout graphIntervalValidatableLayout;
     private ComboBox<Computation> computationSelection;
-    private LineChart<Number, Number> graph;
+    private FunctionGraph graph;
     private Label outputsResultLabel;
 
     public static void main(String[] args) {
@@ -163,7 +163,6 @@ public class Main extends Application implements MainContract.IMainView {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
         scrollPane.setPrefSize(300, 50);
         scrollPane.setContent(outputsResultLabel);
         VBox outputsLabelsContainer = new VBox(outputDescriptionLabel, scrollPane);
@@ -194,40 +193,16 @@ public class Main extends Application implements MainContract.IMainView {
     @Override
     public void showGraph(List<Integer> inputs, List<Integer> outputs) {
         // We create the graph only if it is not already present in the grid container.
-        if (!gridContainer.getChildren().contains(graphContainer)) {
-            // Graph objects initialization.
-            graphContainer = new VBox();
-            Label graphDescriptionLabel = new Label("Function graph:");
-            NumberAxis xAxis = new NumberAxis();
-            NumberAxis yAxis = new NumberAxis();
-            graph = new LineChart<>(xAxis, yAxis);
-            // Graph objects setup.
-            graphContainer.setSpacing(4);
-            xAxis.setLabel("Input");
-            yAxis.setLabel("Output");
-            graph.setMaxHeight(250);
-            graph.setMaxWidth(300);
-            // Graph container population.
-            graphContainer.getChildren().addAll(graphDescriptionLabel, graph);
+        if (!gridContainer.getChildren().contains(graph)) {
+            // Graph object initialization.
+            graph = new FunctionGraph(presenter.getCurrentComputation());
+            graph.applyCustomSize();
             // Add graph to the right column of the grid container.
-            gridContainer.add(graphContainer, 1, 1);
+            gridContainer.add(graph, 1, 1);
         }
 
         // Populate the graph.
-        // NB: there is a bug in the chart library which plots the correct sequence
-        // in a wrong way. For example 4 for the coprime function gives a strange graph but
-        // if you type 4 and some other number and then delete the number then the plot is correct.
-        // This may be due to an edge case that happens when the graph is displayed in a small space.
-        // A way to fix this is to create the graph from scratch each time a new dataset is received, but
-        // it is memory inefficient.
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        graph.setTitle(presenter.getCurrentComputation().getLabel() + " for 1 to " + outputs.size() + ":");
-        series.setName("Computation of the function for 1 to " + outputs.size());
-        for (int i = 0; i < inputs.size(); i++) {
-            series.getData().add(new XYChart.Data<>(inputs.get(i), outputs.get(i)));
-        }
-        graph.getData().clear();
-        graph.getData().add(series);
+        graph.populate(inputs, outputs, true);
 
         // We don't want to recreate the controls each time, thus if they are already inside of our
         // grid container we don't create them twice.
@@ -239,11 +214,12 @@ public class Main extends Application implements MainContract.IMainView {
             HBox graphControlsContainer = new HBox(decraeseButton, increaseButton);
             graphIntervalValidatableLayout = new ValidatableLayout(
                     4,
-                    "Insert the extreme higher n of the plot (1 to n):",
+                    "Plot from 1 to:",
                     Collections.singletonList(Constraint.GREATER_THAN_0),
                     false
             );
             graphControlsMainContainer = new VBox();
+            graphControlsMainContainer.setSpacing(4);
             // Graph controls objects setup.
             decraeseButton.setMinWidth(148);
             decraeseButton.setOnAction(event -> handleGraphIntervalButtonClick(false));
