@@ -11,10 +11,8 @@ import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -274,6 +272,7 @@ public class Main extends Application implements MainContract.IMainView {
         toolbar.getColumnConstraints().add(new ColumnConstraints(WINDOW_DEFAULT_WIDTH / 3.0));
         toolbar.setPadding(new Insets(16, 16, 16, 16));
         toolbar.getStyleClass().add("menu-bar");
+        toolbar.setEffect(getMenuBarShadow());
 
         Label title = new Label("Function Calculator");
         title.getStyleClass().add("title-label");
@@ -288,8 +287,9 @@ public class Main extends Application implements MainContract.IMainView {
         HBox bottomBar = new HBox();
         bottomBar.setPadding(new Insets(16, 16, 16, 16));
         bottomBar.setSpacing(8);
-        bottomBar.getStyleClass().add("menu-bar");
         bottomBar.setAlignment(Pos.CENTER_LEFT);
+        bottomBar.getStyleClass().add("menu-bar");
+        bottomBar.setEffect(getMenuBarShadow());
 
         Button clearAllButton = new Button("Clear all");
         clearAllButton.setOnAction(this::handleClearAllButton);
@@ -368,5 +368,9 @@ public class Main extends Application implements MainContract.IMainView {
         alert.setTitle("An error occurred");
         alert.setContentText(text);
         alert.showAndWait();
+    }
+
+    private DropShadow getMenuBarShadow() {
+        return new DropShadow(10, Color.rgb(0, 0, 0, 0.3));
     }
 }

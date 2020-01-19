@@ -10,8 +10,13 @@
     -fx-border-radius: 5;
 }
 
+.combo-box .cell:selected {
+    -fx-text-fill: rgb(0, 0, 0);
+    -fx-background: rgb(255, 101, 48);
+}
+
 .menu-bar {
-    -fx-background-color: rgb(255, 101, 48)
+    -fx-background-color: rgb(255, 101, 48);
 }
 
 .title-label {
