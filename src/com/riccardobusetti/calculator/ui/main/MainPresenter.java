@@ -62,12 +62,16 @@ public class MainPresenter implements MainContract.IMainPresenter {
         List<Integer> outputs = new ArrayList<>();
 
         for (int i = 1; i <= n; i++) {
-            inputs.add(i);
+            inputs.add((i - 1), i);
 
             List<Integer> functionOutputs = getOutputsGuarded(Collections.singletonList(i));
 
-            if (functionOutputs != null && functionOutputs.size() > 0)
+            if (functionOutputs != null && functionOutputs.size() > 0) {
                 outputs.add(functionOutputs.get(0));
+            } else if (functionOutputs == null) {
+                inputs.remove((i - 1));
+                break;
+            }
         }
 
         if (inputs.size() == outputs.size())
@@ -78,7 +82,7 @@ public class MainPresenter implements MainContract.IMainPresenter {
         try {
             return getOutputs(inputs);
         } catch (Exception exception) {
-            view.showError("There was an error during " + currentComputation.getLabel() + " computation.\n" + exception.getMessage());
+            view.showError("Error during " + currentComputation.getLabel() + " computation.\n\n" + exception.getMessage());
             HistoryLogger.getInstance().logComputation(currentComputation, inputs, null);
             return null;
         }

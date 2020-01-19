@@ -1,5 +1,7 @@
 package com.riccardobusetti.calculator.util;
 
+import com.riccardobusetti.calculator.exception.ExceededIntegerRangeException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -102,7 +104,11 @@ public class MathUtil {
         return outputs;
     }
 
-    public static int partition(int n) {
-        return (int) ((1 / (4 * n * Math.sqrt(3))) * Math.exp(Math.PI * Math.sqrt((2 * n) / 3.0)));
+    public static int partition(int n) throws Exception {
+        int result = (int) ((1 / (4 * n * Math.sqrt(3))) * Math.exp(Math.PI * Math.sqrt((2 * n) / 3.0)));
+
+        if (result >= Integer.MAX_VALUE) throw new ExceededIntegerRangeException();
+
+        return result;
     }
 }
